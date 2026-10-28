@@ -552,6 +552,8 @@ export const SCOPES = {
     "src/ghidra/GhidraJavaProperties.ts",
     "src/ghidra/GhidraReleasePolicy.ts",
     "scripts/verify-ghidra-bridge-sources.mjs",
+    "tests/conformance/ghidra/ReaArmContextProbe.java",
+    "tests/conformance/ghidra/ReaDecodeProbe.java",
     ".github/workflows/ghidra-bridge-sources.yml",
   ],
   website: [
