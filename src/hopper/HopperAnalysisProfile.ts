@@ -202,16 +202,24 @@ const resolveHopperAnalysisProfileInScope = async (
   });
 };
 
-/** Ghidra owns these lanes; Hopper names the family it declines rather than guessing. */
-const HOPPER_DECLINED_ARCHITECTURE_LABELS: Record<
+/**
+ * Ghidra owns these lanes; Hopper names the declined family by its id and says
+ * whether REA has verified the Ghidra lane, rather than guessing.
+ */
+const HOPPER_DECLINED_GHIDRA_LANES: Record<
   ElfMetadataArchitecture | "hexagon",
-  string
+  "verified" | "unverified"
 > = {
-  mips: "MIPS",
-  riscv: "RISC-V",
-  powerpc: "PowerPC",
-  hexagon: "Hexagon",
+  mips: "verified",
+  riscv: "verified",
+  powerpc: "verified",
+  hexagon: "unverified",
 };
+
+/** Whether REA has verified the Ghidra lane that a declined family is pointed to. */
+export const hopperDeclinedGhidraLane = (
+  architecture: ElfMetadataArchitecture | "hexagon",
+): "verified" | "unverified" => HOPPER_DECLINED_GHIDRA_LANES[architecture];
 
 /** Families with no verified Hopper lane, declined before any loader selection. */
 export type HopperDeclinedArchitecture =
@@ -228,10 +236,15 @@ export const isHopperDeclinedArchitecture = (
 
 export const hopperDeclinedArchitectureReason = (
   architecture: HopperDeclinedArchitecture,
-): string =>
-  architecture === "arm64_32"
-    ? "REA's Hopper adapter has no verified arm64_32 lane."
-    : `REA's Hopper adapter does not admit ${HOPPER_DECLINED_ARCHITECTURE_LABELS[architecture]} targets. Select a verified Ghidra ${HOPPER_DECLINED_ARCHITECTURE_LABELS[architecture]} profile instead.`;
+): string => {
+  if (architecture === "arm64_32")
+    return "REA's Hopper adapter has no verified arm64_32 lane.";
+  return `REA's Hopper adapter does not admit ${architecture} targets. ${
+    hopperDeclinedGhidraLane(architecture) === "verified"
+      ? `Select a verified Ghidra ${architecture} profile instead.`
+      : "Ghidra admits them through a lane REA has not verified."
+  }`;
+};
 
 /** Derive Hopper's complete non-interactive CLI loader selection. */
 export const hopperLoaderArgsForTarget = (
