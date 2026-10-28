@@ -437,6 +437,31 @@ it("returns actionable unavailable without creating a workspace when tools are a
   });
 });
 
+it("retains the rejected relative REA_WABT_BIN_DIRECTORY spelling in the refusal", async () => {
+  const provider = new WabtArtifactProvider(
+    { REA_WABT_BIN_DIRECTORY: "wabt/bin" },
+    undefined,
+    () => {
+      throw new Error("Must not allocate");
+    },
+  );
+  const result = await provider.inspect({
+    path: "/module.wasm",
+    glue_paths: [],
+    candidate_paths: [],
+  });
+  if (result.ok) throw new Error("Expected WABT configuration rejection");
+  const projected = projectAnalysisError(result.error);
+  expect(projected).toMatchObject({
+    code: "capability_unavailable",
+    retryable: false,
+    message: expect.stringContaining('received "wabt/bin"'),
+    details: { reason: expect.stringContaining('received "wabt/bin"') },
+  });
+  expect(projected.message).toContain("must be an absolute tool directory");
+  expect(projected.remediation.action).toContain("REA_WABT_BIN_DIRECTORY");
+});
+
 it("preserves a pre-aborted caller reason without acquiring WASM facts", async () => {
   const reason = { source: "caller cancelled before provider admission" };
   const controller = new AbortController();

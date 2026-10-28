@@ -83,6 +83,31 @@ const assertFirstSummaryDelivery = async (
   return { summary, retained };
 };
 
+it("retains the rejected WABT directory in the MCP refusal", async () => {
+  const directory = await createTestTempDirectory("rea-wabt-relative-");
+  const path = join(directory, "module.wasm");
+  const bytes = Buffer.from("0061736d01000000", "hex");
+  await writeFile(path, bytes);
+  const selected = "relative tools/wabt";
+  const harness = await createApplicationMcpHarness({
+    serverOptions: { environment: { REA_WABT_BIN_DIRECTORY: selected } },
+  });
+  onTestFinished(harness.close);
+  const result = await harness.client.callTool({
+    name: "inspect_wasm_artifact",
+    arguments: { path },
+  });
+  expect(parseMcpToolError(result)).toMatchObject({
+    error: {
+      code: "capability_unavailable",
+      retryable: false,
+      message: expect.stringContaining(JSON.stringify(selected)),
+      details: { reason: expect.stringContaining(JSON.stringify(selected)) },
+    },
+  });
+  expect((await readFile(path)).equals(bytes)).toBe(true);
+});
+
 it.each(["bin", "hop"])(
   "directs rejected native WASM opening (%s suffix) to the advertised static tool while preserving missing-WABT diagnostics",
   async (extension) => {

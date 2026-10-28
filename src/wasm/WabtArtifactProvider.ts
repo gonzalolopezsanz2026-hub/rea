@@ -213,10 +213,15 @@ export class WabtArtifactProvider implements WasmArtifactPort {
         throw new AnalysisCancelledError(OPERATION, {
           cause: options.signal.reason,
         });
-      const directory = environment.REA_WABT_BIN_DIRECTORY ?? "";
+      const directory = environment.REA_WABT_BIN_DIRECTORY;
+      // The rejected spelling is the caller's only lead; keep it with the refusal.
+      if (directory === undefined)
+        throw new Error(
+          "REA_WABT_BIN_DIRECTORY is not set; it must be an absolute tool directory.",
+        );
       if (!isAbsolute(directory))
         throw new Error(
-          "REA_WABT_BIN_DIRECTORY must be an absolute tool directory.",
+          `REA_WABT_BIN_DIRECTORY must be an absolute tool directory; received ${JSON.stringify(directory)}.`,
         );
       const commands: {
         tool: "wasm-validate" | "wasm-objdump" | "wasm2wat";

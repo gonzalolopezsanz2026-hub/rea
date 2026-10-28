@@ -32,6 +32,28 @@ const commandTraceSchema = z.object({
 const fixtureUrl = (name: string) =>
   fileURLToPath(new URL(`../../fixtures/wasm/${name}`, import.meta.url));
 
+cliTest("retains the rejected WABT directory in the CLI refusal", async ({
+  cli,
+}) => {
+  const root = await createTestTempDirectory("rea-wabt-relative-cli-");
+  const artifact = join(root, "module.wasm");
+  const bytes = Buffer.from("0061736d01000000", "hex");
+  await writeFile(artifact, bytes);
+  const selected = "relative tools/wabt";
+  const result = await cli.run({
+    arguments: ["inspect-wasm-artifact", artifact, "--json"],
+    environment: { ...process.env, REA_WABT_BIN_DIRECTORY: selected },
+  });
+  expect(result.exitCode).toBe(1);
+  expect(result.json).toMatchObject({
+    code: "capability_unavailable",
+    retryable: false,
+    message: expect.stringContaining(JSON.stringify(selected)),
+    details: { reason: expect.stringContaining(JSON.stringify(selected)) },
+  });
+  expect((await readFile(artifact)).equals(bytes)).toBe(true);
+});
+
 /** Real shell/Node launchers with authored WABT output, not installed WABT engines. */
 const createFixture = async () => {
   const root = await createTestTempDirectory("rea-wabt-launcher-");
