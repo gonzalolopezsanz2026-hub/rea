@@ -35,6 +35,8 @@ export const INCUR_BUILTIN_FLAGS: ReadonlySet<string> = new Set([
 export interface IncurBuiltinArgumentSplit {
   /** Tokens left for command resolution and command option parsing. */
   readonly command: readonly string[];
+  /** Argument position of each `command` token. */
+  readonly commandIndices: readonly number[];
   /** Positions of nonempty values consumed by valued output flags. */
   readonly outputValues: readonly {
     readonly flag: string;
@@ -51,6 +53,7 @@ export const splitIncurBuiltinArguments = (
   arguments_: readonly string[],
 ): IncurBuiltinArgumentSplit => {
   const command: string[] = [];
+  const commandIndices: number[] = [];
   const outputValues: { readonly flag: string; readonly index: number }[] = [];
   for (let index = 0; index < arguments_.length; index += 1) {
     const argument = arguments_[index]!;
@@ -67,8 +70,9 @@ export const splitIncurBuiltinArguments = (
       continue;
     }
     command.push(argument);
+    commandIndices.push(index);
   }
-  return { command, outputValues };
+  return { command, commandIndices, outputValues };
 };
 
 /**
