@@ -14,7 +14,14 @@ export const JADX_BRIDGE_IDENTITY = Object.freeze({
 });
 
 /** Remediation when `REA_JADX_MCP_JAR` is missing or not an absolute path. */
-export const JADX_JAR_CONFIGURATION_REMEDIATION = `Set REA_JADX_MCP_JAR to the absolute path of a caller-supplied jadx-headless-mcp ${JADX_RELEASE.version} JAR. REA does not download or install it.`;
+export const JADX_JAR_CONFIGURATION_REMEDIATION = `Set REA_JADX_MCP_JAR to the absolute path of a caller-supplied jadx-headless-mcp ${JADX_RELEASE.version} JAR published at ${JADX_RELEASE.url} (SHA-256 ${JADX_RELEASE.sha256}). REA does not download or install it. A JAR from the similarly named jadx-headless-mcp v1.x project (com/zin/jadxheadless) is not compatible.`;
+
+/**
+ * Complete provider-owned setup guidance shared with surfaces that report
+ * Android availability without constructing the provider. Keeping this string
+ * beside the release metadata gives every remediation one owner.
+ */
+export const JADX_SETUP_GUIDANCE = `${JADX_JAR_CONFIGURATION_REMEDIATION} Provide a full JDK on Linux, macOS, or Windows x64 with its matching bundled native controls.`;
 
 /** Remediation when the selected Java runtime cannot satisfy the JADX bridge. */
 export const JADX_JAVA_RUNTIME_REMEDIATION =

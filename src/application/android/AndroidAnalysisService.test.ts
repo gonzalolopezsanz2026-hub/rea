@@ -6,6 +6,7 @@ import { projectAnalysisError } from "../../domain/analysisErrorProjection.js";
 it("retains selector correction issues before target acquisition", async () => {
   const execute = vi.fn<AndroidAnalysisPort["execute"]>();
   const provider: AndroidAnalysisPort = {
+    setupGuidance: "Set REA_JADX_MCP_JAR to the fixture JAR.",
     execute,
     inspectAvailability: vi.fn(),
     close: vi.fn(),

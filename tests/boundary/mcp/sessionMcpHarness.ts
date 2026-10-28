@@ -10,7 +10,10 @@ import { z } from "zod";
 import { createTestBinarySession } from "../../fixtures/binarySession.js";
 import { createAnalysisProfile } from "../../../src/domain/analysisProfile.js";
 import { createEvidence } from "../../../src/domain/evidence.js";
-import type { ProviderAvailability } from "../../../src/application/AnalysisProvider.js";
+import type {
+  ProviderAvailability,
+  AnalysisProvider,
+} from "../../../src/application/AnalysisProvider.js";
 import type { AndroidAnalysisPort } from "../../../src/application/android/AndroidAnalysisPort.js";
 import type { AdbDeviceAnalysisPort } from "../../../src/application/adb/AdbDeviceAnalysisPort.js";
 import type { ApktoolResourceAnalysisPort } from "../../../src/application/apktool/ApktoolResourceAnalysisPort.js";
@@ -21,7 +24,6 @@ import {
 import { ok } from "../../../src/domain/result.js";
 import { silentLogger } from "../../../src/logger.js";
 import { createServer } from "../../../src/server/createServer.js";
-import type { AnalysisProvider } from "../../../src/application/AnalysisProvider.js";
 
 const SNAPSHOT_PROFILE = createAnalysisProfile(
   { id: "fixture", name: "Fixture analysis provider", version: "1" },
@@ -43,6 +45,7 @@ const unusedHostToolExecution = async (): Promise<never> => {
 // Android tools happen to be installed on the test host. The dedicated public
 // availability test below continues to exercise status projection separately.
 const androidAnalysis: AndroidAnalysisPort = {
+  setupGuidance: "Set REA_JADX_MCP_JAR to the fixture JAR.",
   inspectAvailability: async () => HOST_TOOLS_NOT_CONFIGURED,
   close: async () => {},
   execute: unusedHostToolExecution,

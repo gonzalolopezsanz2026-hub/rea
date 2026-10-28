@@ -116,22 +116,20 @@ export async function verifyAndroidFailureRecovery({
         label: "missing java",
         env: { ...withoutJavaHome, PATH: empty },
         observation:
-          process.platform === "win32" ? "Cannot find java.exe" : "ENOENT",
+          process.platform === "win32"
+            ? "Cannot find an executable java.exe on the selected Windows PATH"
+            : "Cannot find an executable java on the selected PATH",
         diagnostics: {
           failure_kind: "java_runtime",
           failure_code: "runtime_missing",
-          ...(process.platform === "win32"
-            ? {}
-            : { process_error_code: "ENOENT" }),
+          java_executable: process.platform === "win32" ? "java.exe" : "java",
+          phase: "path-lookup",
         },
         message:
           process.platform === "win32"
-            ? /Cannot find java\.exe/u
-            : /selected Java runtime/u,
-        remediation:
-          process.platform === "win32"
-            ? /JAVA_HOME|PATH/u
-            : /selected launcher/u,
+            ? /Cannot find an executable java\.exe/u
+            : /Cannot find an executable java/u,
+        remediation: /JAVA_HOME or PATH/u,
       },
       {
         label: "invalid engine archive with a working JDK",

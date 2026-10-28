@@ -332,6 +332,7 @@ describe("target-free MCP lifecycle", () => {
     const closed: string[] = [];
     const session = createTestBinarySession(provider(closed));
     const androidAnalysis: AndroidAnalysisPort = {
+      setupGuidance: "Set REA_JADX_MCP_JAR to the fixture JAR.",
       inspectAvailability: () => {
         entered.resolve();
         return availability.promise;
