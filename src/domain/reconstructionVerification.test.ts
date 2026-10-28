@@ -2,13 +2,14 @@ import { describe, expect, it } from "vitest";
 
 import { createEvidence, type Evidence } from "./evidence.js";
 import { AnalysisInputError } from "./analysisErrorCore.js";
+import { compareArtifacts } from "./artifactComparison.js";
 import { createEvidenceBundle } from "./evidenceBundle.js";
 import { EvidenceIntegrityError } from "./evidenceErrors.js";
 import {
   reconstructionVerificationResultSchema,
   reconstructionSpecificationSchema,
 } from "./reconstructionVerificationSchemas.js";
-import type { JsonValue } from "./jsonValue.js";
+import { jsonValueSchema, type JsonValue } from "./jsonValue.js";
 import { EMPTY_PROCESS_CAPTURE_EXAMPLE } from "./process/processCaptureExample.js";
 import { ARTIFACT_COMPARISON_EXAMPLE } from "../contracts/artifactComparisonExample.js";
 import { createResidualUnknown } from "./residualUnknown.js";
@@ -196,6 +197,7 @@ const artifactComparison = (
   left: Evidence,
   right: Evidence,
   partial = false,
+  result?: JsonValue,
 ): Evidence =>
   createEvidence(
     undefined,
@@ -211,12 +213,37 @@ const artifactComparison = (
         left_evidence_ids: [left.evidence_id],
         right_evidence_ids: [right.evidence_id],
       },
-      result: artifactResult(partial, [left.evidence_id, right.evidence_id]),
+      result:
+        result ??
+        artifactResult(partial, [left.evidence_id, right.evidence_id]),
       confidence: "derived",
       authority: "analyst-inference",
       evidenceLinks: [left.evidence_id, right.evidence_id],
     },
   );
+
+const verifyArtifactComparison = (
+  left: Evidence,
+  right: Evidence,
+  result: JsonValue,
+) => {
+  const comparison = artifactComparison(left, right, false, result);
+  return verifyReconstruction(
+    {
+      name: "Artifact structure",
+      claims: [
+        {
+          kind: "structural-artifact",
+          claim_id: "artifact-graph",
+          title: "Artifact graph remains equal",
+          comparison_evidence_id: comparison.evidence_id,
+          dimension: "overall",
+        },
+      ],
+    },
+    createEvidenceBundle([left, right, comparison]),
+  );
+};
 
 describe("reconstruction verification", () => {
   it("accepts real process dimensions and rejects removed protocol dimensions", () => {
@@ -419,6 +446,24 @@ describe("reconstruction verification outcomes", () => {
       summary: { failed: 1 },
       claims: { items: [{ status: "fail", observed_status: "changed" }] },
     });
+  });
+
+  it("rejects an unchanged artifact aggregate that disagrees with retained changes", () => {
+    const left = ARTIFACT_COMPARISON_EXAMPLE.left;
+    const right = ARTIFACT_COMPARISON_EXAMPLE.right;
+    const changed = compareArtifacts(left, right);
+    expect(changed.status).toBe("changed");
+    expect(changed.changes).toHaveLength(1);
+    expect(changed.changes[0]?.classification).toBe("changed");
+    const inconsistentResults = [
+      jsonValueSchema.parse({ ...changed, status: "unchanged" }),
+      jsonValueSchema.parse({ ...changed, status: "unchanged", changes: [] }),
+    ];
+
+    for (const result of inconsistentResults)
+      expect(() => verifyArtifactComparison(left, right, result)).toThrow(
+        EvidenceIntegrityError,
+      );
   });
 
   it("keeps insufficient authority and partial structural evidence unknown", () => {

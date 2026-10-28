@@ -70,6 +70,8 @@ export function readComparisonResult(
     evidence.normalized_result,
   );
   if (!parsed.ok) return parsed;
+  const consistency = validateUnchangedArtifactComparison(parsed.value);
+  if (!consistency.ok) return consistency;
   const links = validateFindingLinks(
     evidence,
     parsed.value.changes.flatMap(({ evidence_links }) => evidence_links),
@@ -77,6 +79,26 @@ export function readComparisonResult(
   if (!links.ok) return links;
   return ok({ operation, evidence, result: parsed.value });
 }
+
+const validateUnchangedArtifactComparison = (
+  result: ArtifactComparisonResult,
+): Result<void, EvidenceIntegrityError> => {
+  if (
+    result.status !== "unchanged" ||
+    (result.changes.length === 0 &&
+      result.summary.added === 0 &&
+      result.summary.removed === 0 &&
+      result.summary.changed === 0 &&
+      result.summary.unknown === 0 &&
+      result.summary.contradiction === 0)
+  )
+    return ok(undefined);
+  return err(
+    new EvidenceIntegrityError(
+      "Artifact comparison marked unchanged contains retained changes or non-zero change counts",
+    ),
+  );
+};
 
 const validateFindingLinks = (
   evidence: Evidence,
