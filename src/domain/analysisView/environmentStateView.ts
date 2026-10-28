@@ -246,6 +246,7 @@ const fieldRuleSchema = z.discriminatedUnion("rule", [
     rule: z.literal("sequence"),
     scope: z.enum(["collection", "type"]),
     start: z.number().int().exactOptional(),
+    sent: z.literal(true).exactOptional(),
   }),
   z.strictObject({ ...ruled, rule: z.literal("unique") }),
   z.strictObject({
@@ -321,6 +322,7 @@ const fieldRuleSchema = z.discriminatedUnion("rule", [
     member: z.string(),
     type: z.string(),
     fields: z.array(z.string()).min(1),
+    many: z.literal(true).exactOptional(),
   }),
   z.strictObject({ ...ruled, rule: z.literal("increment") }),
   z.strictObject({
@@ -341,6 +343,7 @@ const fieldRuleSchema = z.discriminatedUnion("rule", [
     member: z.string(),
   }),
   z.strictObject({ ...ruled, rule: z.literal("set"), value: jsonValueSchema }),
+  z.strictObject({ ...ruled, rule: z.literal("toggle") }),
 ]);
 const insertRuleSchema = z.union([
   z.strictObject({ rule: z.enum(["first", "last"]) }),
@@ -395,7 +398,7 @@ const writePlanSchema = z.strictObject({
         })
         .exactOptional()
         .describe(
-          "A create's later read of the entity: an item read lends fields the response lacks and its clock spellings, a list read only adds fields the response lacks.",
+          "A write's later read of the entity: an item read lends a create fields the response lacks, and its clock spellings; a list read only adds fields the response lacks.",
         ),
     })
     .nullable()
