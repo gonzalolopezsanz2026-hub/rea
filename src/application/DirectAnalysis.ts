@@ -132,6 +132,7 @@ export const runDirectAnalysis = async (
     readonly formatHint?: ExecutableFormatHint;
     readonly architecture?: BinaryArchitecture;
     readonly entryPoint?: string;
+    readonly dsymPath?: string;
   } = {},
 ): Promise<Result<Evidence, JsonValue>> =>
   withProcessCancellation(options.signal, (signal) =>
@@ -148,6 +149,8 @@ export const runDirectAnalysis = async (
       ...(options.entryPoint === undefined
         ? {}
         : { entryPoint: options.entryPoint }),
+      ...(options.dsymPath === undefined ? {} : { dsymPath: options.dsymPath }),
+      ...(options.dsymPath === undefined ? {} : { dsymPath: options.dsymPath }),
       ...(options.providerId === undefined
         ? {}
         : { providerId: options.providerId }),
@@ -327,6 +330,7 @@ const runAnalysis = async (
     readonly formatHint?: ExecutableFormatHint;
     readonly architecture?: BinaryArchitecture;
     readonly entryPoint?: string;
+    readonly dsymPath?: string;
   },
 ): Promise<Result<Evidence, JsonValue>> => {
   const { logger, signal, snapshotPath } = options;
@@ -382,6 +386,7 @@ const runAnalysis = async (
       ...(options.entryPoint === undefined
         ? {}
         : { entryPoint: options.entryPoint }),
+      ...(options.dsymPath === undefined ? {} : { dsymPath: options.dsymPath }),
     });
     if (!prepared.ok) return err(prepared.error);
     const { snapshot } = prepared.value;
@@ -399,6 +404,12 @@ const runAnalysis = async (
         ...(options.entryPoint === undefined
           ? {}
           : { entryPoint: options.entryPoint }),
+        ...(options.dsymPath === undefined
+          ? {}
+          : { dsymPath: options.dsymPath }),
+        ...(options.dsymPath === undefined
+          ? {}
+          : { dsymPath: options.dsymPath }),
         ...(options.providerId === undefined
           ? {}
           : { providerId: options.providerId }),
@@ -446,6 +457,7 @@ const runAnalysis = async (
       ...(options.entryPoint === undefined
         ? {}
         : { entryPoint: options.entryPoint }),
+      ...(options.dsymPath === undefined ? {} : { dsymPath: options.dsymPath }),
       ...(snapshot === undefined ? {} : { snapshot }),
       ...(options.providerId === undefined
         ? {}
@@ -703,6 +715,7 @@ const prepareSnapshot = async (options: {
   readonly formatHint?: ExecutableFormatHint;
   readonly architecture?: BinaryArchitecture;
   readonly entryPoint?: string;
+  readonly dsymPath?: string;
   readonly snapshotPath: string | undefined;
   readonly signal: AbortSignal;
 }): Promise<
@@ -730,6 +743,8 @@ const prepareSnapshot = async (options: {
     ...(options.entryPoint === undefined
       ? {}
       : { entryPoint: options.entryPoint }),
+    ...(options.dsymPath === undefined ? {} : { dsymPath: options.dsymPath }),
+    ...(options.dsymPath === undefined ? {} : { dsymPath: options.dsymPath }),
   });
   if (!target.ok) return target;
   if (!snapshotMatchesTarget(loaded.value.target, target.value))
