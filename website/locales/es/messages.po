@@ -72,13 +72,13 @@ msgstr "Por N0zoM1z0 * 10 octubre 2026"
 #: website/public/examples/dino-lab/index.html:484
 #: website/public/faq/index.html:582
 #: website/public/first-investigation/index.html:543
-#: website/public/get-started/index.html:1826
+#: website/public/get-started/index.html:1829
 #: website/public/guides/browser/index.html:516
 #: website/public/guides/index.html:310
 #: website/public/guides/javascript/index.html:520
-#: website/public/guides/native/index.html:518
+#: website/public/guides/native/index.html:519
 #: website/public/guides/rl-environments/index.html:507
-#: website/public/index.html:1312 website/public/showcase/aegis/index.html:817
+#: website/public/index.html:1312 website/public/showcase/aegis/index.html:820
 #: website/public/showcase/ctf/index.html:786
 #: website/public/showcase/dx-ball/index.html:794
 #: website/public/showcase/index.html:346
@@ -3323,21 +3323,21 @@ msgstr "Terminal"
 #: website/public/get-started/index.html:816
 #: website/public/get-started/index.html:864
 #: website/public/get-started/index.html:897
-#: website/public/get-started/index.html:1049
-#: website/public/get-started/index.html:1111
-#: website/public/get-started/index.html:1134
-#: website/public/get-started/index.html:1158
-#: website/public/get-started/index.html:1206
-#: website/public/get-started/index.html:1281
-#: website/public/get-started/index.html:1307
-#: website/public/get-started/index.html:1324
-#: website/public/get-started/index.html:1567
-#: website/public/get-started/index.html:1626
-#: website/public/get-started/index.html:1645
-#: website/public/get-started/index.html:1667
-#: website/public/get-started/index.html:1710
-#: website/public/get-started/index.html:1740
-#: website/public/get-started/index.html:1761
+#: website/public/get-started/index.html:1052
+#: website/public/get-started/index.html:1114
+#: website/public/get-started/index.html:1137
+#: website/public/get-started/index.html:1161
+#: website/public/get-started/index.html:1209
+#: website/public/get-started/index.html:1284
+#: website/public/get-started/index.html:1310
+#: website/public/get-started/index.html:1327
+#: website/public/get-started/index.html:1570
+#: website/public/get-started/index.html:1629
+#: website/public/get-started/index.html:1648
+#: website/public/get-started/index.html:1670
+#: website/public/get-started/index.html:1713
+#: website/public/get-started/index.html:1743
+#: website/public/get-started/index.html:1764
 msgctxt "page:get-started/index.html"
 msgid "Copy"
 msgstr "Copiar"
@@ -3569,14 +3569,14 @@ msgstr ""
 " aparecerá su ruta."
 
 #: website/public/get-started/index.html:975
-#: website/public/get-started/index.html:1733
+#: website/public/get-started/index.html:1736
 msgctxt "page:get-started/index.html"
 msgid "In a terminal, put quotes around a path that contains spaces."
 msgstr ""
 "En una terminal, coloque comillas alrededor de una ruta que contenga "
 "espacios."
 
-#: website/public/get-started/index.html:1560
+#: website/public/get-started/index.html:1563
 msgctxt "page:get-started/index.html"
 msgid ""
 "Analyze a JavaScript or Electron application folder or ASAR archive without "
@@ -3585,14 +3585,14 @@ msgstr ""
 "Analice una carpeta de aplicación JavaScript o Electron o un archivo ASAR "
 "sin ejecutar la aplicación:"
 
-#: website/public/get-started/index.html:1566
+#: website/public/get-started/index.html:1569
 msgctxt "page:get-started/index.html"
 msgid "Static application analysis"
 msgstr "Análisis estático de aplicaciones"
 
 #. {ph0}: <code>.asar</code>
 #. {ph1}: <code>"D:/apps/example"</code>
-#: website/public/get-started/index.html:1578
+#: website/public/get-started/index.html:1581
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -3602,13 +3602,13 @@ msgstr ""
 "Reemplace la ruta con el directorio de la aplicación extraída o {ph0} "
 "archivo. En Windows, una ruta como {ph1} trabaja aquí."
 
-#: website/public/get-started/index.html:1584
+#: website/public/get-started/index.html:1587
 msgctxt "page:get-started/index.html"
 msgid "Where do I find an app's .asar file?"
 msgstr "¿Dónde encuentro el archivo .asar de una aplicación?"
 
 #. {ph0}: <code>resources</code>
-#: website/public/get-started/index.html:1585
+#: website/public/get-started/index.html:1588
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "Electron apps usually keep it in a {ph0} folder:"
@@ -3620,7 +3620,7 @@ msgstr ""
 #. {ph2}: <code
 #. >C:\Users\&lt;you&gt;\AppData\Local\Programs\&lt;App&gt;\resources\app.asar</code
 #. >
-#: website/public/get-started/index.html:1590
+#: website/public/get-started/index.html:1593
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Windows:{ph1} {ph2}"
@@ -3632,7 +3632,7 @@ msgstr "{ph0} Windows :{ph1} {ph2}"
 #. >/Applications/&lt;App&gt;.app/Contents/Resources/app.asar</code >
 #. {ph3}: <em>
 #. {ph4}: </em>
-#: website/public/get-started/index.html:1596
+#: website/public/get-started/index.html:1599
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -3645,14 +3645,14 @@ msgstr ""
 #. {ph0}: <strong>
 #. {ph1}: </strong>
 #. {ph2}: <code>/opt/&lt;App&gt;/resources/app.asar</code>
-#: website/public/get-started/index.html:1604
+#: website/public/get-started/index.html:1607
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Linux:{ph1} often {ph2}"
 msgstr "{ph0} Linux :{ph1} a menudo {ph2}"
 
 #. {ph0}: <code>app.asar</code>
-#: website/public/get-started/index.html:1609
+#: website/public/get-started/index.html:1612
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "Some apps install elsewhere. Search the app's folder for {ph0}."
@@ -3660,7 +3660,7 @@ msgstr ""
 "Algunas aplicaciones se instalan en otro lugar. Busque en la carpeta de la "
 "aplicación {ph0}."
 
-#: website/public/get-started/index.html:1614
+#: website/public/get-started/index.html:1617
 msgctxt "page:get-started/index.html"
 msgid ""
 "The result identifies the app, shows connections between modules and gives "
@@ -3672,36 +3672,36 @@ msgstr ""
 "se pueden resolver están marcadas en el resultado."
 
 #. {ph0}: <code>rea</code>
-#: website/public/get-started/index.html:1619
+#: website/public/get-started/index.html:1622
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "If you'd like a permanent {ph0} command in your shell:"
 msgstr "Si desea un permanente {ph0} comando en tu shell:"
 
-#: website/public/get-started/index.html:1625
+#: website/public/get-started/index.html:1628
 msgctxt "page:get-started/index.html"
 msgid "Install the CLI"
 msgstr "Instale el CLI"
 
 #. {ph0}: <a href="../guides/javascript/" >
 #. {ph1}: </a >
-#: website/public/get-started/index.html:1637
+#: website/public/get-started/index.html:1640
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Continue with the JavaScript application guide{ph1}"
 msgstr "{ph0}Continúe con la guía de aplicación del JavaScript{ph1}"
 
-#: website/public/get-started/index.html:1154
+#: website/public/get-started/index.html:1157
 msgctxt "page:get-started/index.html"
 msgid "Connect your Ghidra installation"
 msgstr "Conecte su instalación de Ghidra"
 
-#: website/public/get-started/index.html:1124
+#: website/public/get-started/index.html:1127
 msgctxt "page:get-started/index.html"
 msgid "Connect Ghidra on Windows"
 msgstr "Conecte Ghidra en Windows"
 
-#: website/public/get-started/index.html:1125
+#: website/public/get-started/index.html:1128
 msgctxt "page:get-started/index.html"
 msgid ""
 "Windows x64 has experimental, read-only support for native x86 and x64 PE "
@@ -3712,7 +3712,7 @@ msgstr ""
 "DLL nativas x86 y x64 PE en unidades NTFS locales fijas. Usa una instalación"
 " existente de Ghidra 12.1.x y un JDK de 64 bits, versión 21 o posterior:"
 
-#: website/public/get-started/index.html:1148
+#: website/public/get-started/index.html:1151
 msgctxt "page:get-started/index.html"
 msgid ""
 "Replace the two paths with your installations, then review setup's plan."
@@ -3730,18 +3730,18 @@ msgstr ""
 "anterior; detecta una instalación existente u ofrece un plan de instalación "
 "para su aprobación."
 
-#: website/public/get-started/index.html:1691
+#: website/public/get-started/index.html:1694
 msgctxt "page:get-started/index.html"
 msgid "Getting help"
 msgstr "Cómo obtener ayuda"
 
-#: website/public/get-started/index.html:1693
+#: website/public/get-started/index.html:1696
 msgctxt "page:get-started/index.html"
 msgid "If your agent doesn't see REA"
 msgstr "Si su agente no ve REA"
 
 #. {ph0}: <code>doctor</code>
-#: website/public/get-started/index.html:1694
+#: website/public/get-started/index.html:1697
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -3751,22 +3751,22 @@ msgstr ""
 "Reinicie o vuelva a conectar el cliente después de la configuración. "
 "Compruebe su conexión REA con {ph0}; para Codex :"
 
-#: website/public/get-started/index.html:1705
+#: website/public/get-started/index.html:1708
 msgctxt "page:get-started/index.html"
 msgid "If a provider needs attention"
 msgstr "Si un proveedor necesita atención"
 
-#: website/public/get-started/index.html:1706
+#: website/public/get-started/index.html:1709
 msgctxt "page:get-started/index.html"
 msgid "Check the provider you're using. For Ghidra:"
 msgstr "Verifique el proveedor que está usando. Para Ghidra :"
 
-#: website/public/get-started/index.html:1709
+#: website/public/get-started/index.html:1712
 msgctxt "page:get-started/index.html"
 msgid "Check one provider"
 msgstr "Consulte a un proveedor"
 
-#: website/public/get-started/index.html:1721
+#: website/public/get-started/index.html:1724
 msgctxt "page:get-started/index.html"
 msgid "The report gives the failed check and a suggested next step."
 msgstr ""
@@ -3776,7 +3776,7 @@ msgstr ""
 #. {ph1}: </a >
 #. {ph2}: <span>
 #. {ph3}: </span>
-#: website/public/get-started/index.html:1786
+#: website/public/get-started/index.html:1789
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -3789,7 +3789,7 @@ msgstr ""
 #. {ph1}: </a >
 #. {ph2}: <span >
 #. {ph3}: </span >
-#: website/public/get-started/index.html:1790
+#: website/public/get-started/index.html:1793
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -3803,7 +3803,7 @@ msgstr ""
 #. {ph1}: </a >
 #. {ph2}: <span>
 #. {ph3}: </span>
-#: website/public/get-started/index.html:1797
+#: website/public/get-started/index.html:1800
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -3817,7 +3817,7 @@ msgstr ""
 #. {ph1}: </a >
 #. {ph2}: <span>
 #. {ph3}: </span>
-#: website/public/get-started/index.html:1801
+#: website/public/get-started/index.html:1804
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -3883,22 +3883,22 @@ msgctxt "page:get-started/index.html"
 msgid "Copy REA installation prompt"
 msgstr "Copie el mensaje de instalación de REA"
 
-#: website/public/get-started/index.html:1567
+#: website/public/get-started/index.html:1570
 msgctxt "page:get-started/index.html"
 msgid "Copy JavaScript analysis command"
 msgstr "Copie el comando de análisis JavaScript"
 
-#: website/public/get-started/index.html:1626
+#: website/public/get-started/index.html:1629
 msgctxt "page:get-started/index.html"
 msgid "Copy CLI installation command"
 msgstr "Copie el comando de instalación de CLI"
 
-#: website/public/get-started/index.html:1710
+#: website/public/get-started/index.html:1713
 msgctxt "page:get-started/index.html"
 msgid "Copy provider diagnosis command"
 msgstr "Copie el comando de diagnóstico del proveedor"
 
-#: website/public/get-started/index.html:1826
+#: website/public/get-started/index.html:1829
 msgctxt "page:get-started/index.html"
 msgid "Back to top"
 msgstr "Volver arriba"
@@ -5264,21 +5264,7 @@ msgstr "REA necesita uno de estos para leer programas nativos:"
 
 #. {ph0}: <strong>
 #. {ph1}: </strong>
-#: website/public/guides/native/index.html:316
-#, python-brace-format
-msgctxt "page:guides/native/index.html"
-msgid ""
-"{ph0}Hopper{ph1} (macOS or Linux): REA's setup detects it or offers to "
-"install it. On macOS, open Hopper once and choose demo mode or activate a "
-"license before your first analysis."
-msgstr ""
-"{ph0} Hopper {ph1} ( macOS o Linux): La configuración de REA lo detecta u "
-"ofrece instalarlo. En macOS , abra Hopper una vez y elija el modo de "
-"demostración o active una licencia antes de su primer análisis."
-
-#. {ph0}: <strong>
-#. {ph1}: </strong>
-#: website/public/guides/native/index.html:322
+#: website/public/guides/native/index.html:323
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5291,7 +5277,7 @@ msgstr ""
 
 #. {ph0}: <strong>
 #. {ph1}: </strong>
-#: website/public/guides/native/index.html:327
+#: website/public/guides/native/index.html:328
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5302,7 +5288,7 @@ msgstr ""
 
 #. {ph0}: <a href="../../get-started/#native">
 #. {ph1}: </a>
-#: website/public/guides/native/index.html:332
+#: website/public/guides/native/index.html:333
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid "See {ph0}Set up native analysis{ph1} for the steps."
@@ -5318,14 +5304,14 @@ msgstr ""
 #. {ph5}: <i>
 #. {ph6}: </i>
 #. {ph7}: </span >
-#: website/public/guides/native/index.html:340
+#: website/public/guides/native/index.html:341
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid "{ph0}{ph1}{ph2}{ph3}{ph4}{ph5}{ph6}{ph7}Your coding agent"
 msgstr "{ph0}{ph1}{ph2}{ph3}{ph4}{ph5}{ph6}{ph7}Su agente de codificación"
 
-#: website/public/guides/native/index.html:344
-#: website/public/guides/native/index.html:475
+#: website/public/guides/native/index.html:345
+#: website/public/guides/native/index.html:476
 msgctxt "page:guides/native/index.html"
 msgid "Copy"
 msgstr "Copiar"
@@ -5336,7 +5322,7 @@ msgstr "Copiar"
 #. {ph3}: </span >
 #. {ph4}: <span class="terminal-cursor" aria-hidden="true">
 #. {ph5}: </span>
-#: website/public/guides/native/index.html:353
+#: website/public/guides/native/index.html:354
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5347,7 +5333,7 @@ msgstr ""
 "posicionamiento del sonido estéreo. Explique el cálculo y muestre el "
 "código.{ph3}{ph4}{ph5}"
 
-#: website/public/guides/native/index.html:361
+#: website/public/guides/native/index.html:362
 msgctxt "page:guides/native/index.html"
 msgid ""
 "Example prompt. Give your agent the path to your local DX-Ball 1.07 "
@@ -5358,7 +5344,7 @@ msgstr ""
 "DX-Ball 1.07.  REA no incluye DX-Ball, así que use su propia copia o haga el"
 " mismo tipo de pregunta sobre otro pequeño programa Windows que tenga."
 
-#: website/public/guides/native/index.html:368
+#: website/public/guides/native/index.html:369
 msgctxt "page:guides/native/index.html"
 msgid "How do I get a file's full path?"
 msgstr "¿Cómo obtengo la ruta completa de un archivo?"
@@ -5367,7 +5353,7 @@ msgstr "¿Cómo obtengo la ruta completa de un archivo?"
 #. {ph1}: </strong>
 #. {ph2}: <em>
 #. {ph3}: </em>
-#: website/public/guides/native/index.html:370
+#: website/public/guides/native/index.html:371
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5382,7 +5368,7 @@ msgstr ""
 #. {ph1}: </strong>
 #. {ph2}: <em>
 #. {ph3}: </em>
-#: website/public/guides/native/index.html:375
+#: website/public/guides/native/index.html:376
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5395,7 +5381,7 @@ msgstr ""
 
 #. {ph0}: <strong>
 #. {ph1}: </strong>
-#: website/public/guides/native/index.html:379
+#: website/public/guides/native/index.html:380
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5405,17 +5391,17 @@ msgstr ""
 "{ph0}Cualquier sistema:{ph1} arrastre el archivo a una ventana de terminal y"
 " aparecerá su ruta."
 
-#: website/public/guides/native/index.html:387
+#: website/public/guides/native/index.html:388
 msgctxt "page:guides/native/index.html"
 msgid "Read the REA results"
 msgstr "Lea los resultados del REA"
 
-#: website/public/guides/native/index.html:388
+#: website/public/guides/native/index.html:389
 msgctxt "page:guides/native/index.html"
 msgid "Read the input"
 msgstr "Lea la entrada"
 
-#: website/public/guides/native/index.html:397
+#: website/public/guides/native/index.html:398
 msgctxt "page:guides/native/index.html"
 msgid ""
 "The instructions load an integer argument and convert it for floating-point "
@@ -5425,13 +5411,13 @@ msgstr ""
 " de coma flotante. Esta es la entrada ausente en la primera vista de "
 "pseudocódigo."
 
-#: website/public/guides/native/index.html:402
+#: website/public/guides/native/index.html:403
 msgctxt "page:guides/native/index.html"
 msgid "Follow the caller"
 msgstr "Siga a la persona que llama"
 
 #. {ph0}: <code>0x14</code>
-#: website/public/guides/native/index.html:411
+#: website/public/guides/native/index.html:412
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5442,12 +5428,12 @@ msgstr ""
 "instrucciones anteriores multiplican la coordenada del mosaico por 30; "
 "sumando {ph0} (20) da la posición de la pantalla del ladrillo."
 
-#: website/public/guides/native/index.html:416
+#: website/public/guides/native/index.html:417
 msgctxt "page:guides/native/index.html"
 msgid "Read the referenced constants"
 msgstr "Lee las constantes a las que se hace referencia"
 
-#: website/public/guides/native/index.html:427
+#: website/public/guides/native/index.html:428
 msgctxt "page:guides/native/index.html"
 msgid ""
 "The arithmetic references these addresses. Reading the bytes supplies the "
@@ -5457,12 +5443,12 @@ msgstr ""
 "proporciona los valores reales; el orden de instrucción le dice al agente "
 "cómo se usan."
 
-#: website/public/guides/native/index.html:434
+#: website/public/guides/native/index.html:435
 msgctxt "page:guides/native/index.html"
 msgid "Write and check the recovered function"
 msgstr "Escriba y verifique la función recuperada"
 
-#: website/public/guides/native/index.html:443
+#: website/public/guides/native/index.html:444
 msgctxt "page:guides/native/index.html"
 msgid ""
 "With a scale of 1.0, screen positions 0, 320 and 640 map to −500, 0 and 500 "
@@ -5473,7 +5459,7 @@ msgstr ""
 "-500, 0 y 500 antes de la conversión de enteros. El cálculo coloca el centro"
 " de la pantalla en el centro del campo estéreo."
 
-#: website/public/guides/native/index.html:448
+#: website/public/guides/native/index.html:449
 msgctxt "page:guides/native/index.html"
 msgid ""
 "The agent used REA's findings to write the C. Separate checks compared 3,205"
@@ -5486,21 +5472,21 @@ msgstr ""
 
 #. {ph0}: <a href="../../showcase/dx-ball/#sound-pan" >
 #. {ph1}: </a >
-#: website/public/guides/native/index.html:453
+#: website/public/guides/native/index.html:454
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid "{ph0}See the full investigation and assembly-to-C comparison{ph1}"
 msgstr ""
 "{ph0}Vea la investigación completa y la comparación de assembly-to-C{ph1}"
 
-#: website/public/guides/native/index.html:460
+#: website/public/guides/native/index.html:461
 msgctxt "page:guides/native/index.html"
 msgid "Try it with your own binary"
 msgstr "Pruébalo con tu propio binario"
 
 #. {ph0}: <a href="../../get-started/#native" >
 #. {ph1}: </a >
-#: website/public/guides/native/index.html:461
+#: website/public/guides/native/index.html:462
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5514,7 +5500,7 @@ msgstr ""
 " para investigar .  Las preguntas iniciales útiles incluyen \"¿ Cómo se "
 "analiza este archivo?\"o\" ¿Qué función maneja esta acción de menú?”"
 
-#: website/public/guides/native/index.html:468
+#: website/public/guides/native/index.html:469
 msgctxt "page:guides/native/index.html"
 msgid ""
 "If you already know a function name or address, you can query it from the "
@@ -5523,13 +5509,13 @@ msgstr ""
 "Si ya conoce el nombre o la dirección de una función, puede consultarla "
 "desde el terminal. Para una instalación Ghidra configurada:"
 
-#: website/public/guides/native/index.html:474
+#: website/public/guides/native/index.html:475
 msgctxt "page:guides/native/index.html"
 msgid "Function analysis"
 msgstr "Análisis de funciones"
 
 #. {ph0}: <code>main</code>
-#: website/public/guides/native/index.html:487
+#: website/public/guides/native/index.html:488
 #, python-brace-format
 msgctxt "page:guides/native/index.html"
 msgid ""
@@ -5543,7 +5529,7 @@ msgstr ""
 " sesión. Las consultas MCP de su agente reutilizan el binario importado "
 "mientras esa sesión está abierta."
 
-#: website/public/guides/native/index.html:493
+#: website/public/guides/native/index.html:494
 msgctxt "page:guides/native/index.html"
 msgid ""
 "Read the pseudocode alongside instructions and references. When a result "
@@ -5577,17 +5563,17 @@ msgctxt "page:guides/native/index.html"
 msgid "Native analysis"
 msgstr "Análisis de programas de código máquina"
 
-#: website/public/guides/native/index.html:344
+#: website/public/guides/native/index.html:345
 msgctxt "page:guides/native/index.html"
 msgid "Copy example prompt"
 msgstr "Copie el mensaje de ejemplo"
 
-#: website/public/guides/native/index.html:475
+#: website/public/guides/native/index.html:476
 msgctxt "page:guides/native/index.html"
 msgid "Copy function analysis"
 msgstr "Análisis de la función de copia"
 
-#: website/public/guides/native/index.html:518
+#: website/public/guides/native/index.html:519
 msgctxt "page:guides/native/index.html"
 msgid "Back to top"
 msgstr "Volver arriba"
@@ -6574,7 +6560,7 @@ msgid "{ph0}{ph1}{ph2}{ph3}{ph4}{ph5}{ph6}{ph7}Your coding agent"
 msgstr "{ph0}{ph1}{ph2}{ph3}{ph4}{ph5}{ph6}{ph7}Su agente de codificación"
 
 #: website/public/showcase/aegis/index.html:276
-#: website/public/showcase/aegis/index.html:739
+#: website/public/showcase/aegis/index.html:742
 msgctxt "page:showcase/aegis/index.html"
 msgid "Copy"
 msgstr "Copiar"
@@ -6990,21 +6976,9 @@ msgctxt "page:showcase/aegis/index.html"
 msgid "Inspect the APK yourself"
 msgstr "Inspeccione el APK usted mismo"
 
-#. {ph0}: <a href="../../get-started/">
-#. {ph1}: </a>
-#: website/public/showcase/aegis/index.html:714
-#, python-brace-format
-msgctxt "page:showcase/aegis/index.html"
-msgid ""
-"{ph0}Set up REA{ph1} on macOS or Linux, then download these two files into "
-"the same folder. On Windows, use a Linux environment such as WSL."
-msgstr ""
-"{ph0}Configurar REA {ph1} en macOS o Linux , descargue estos dos archivos en"
-" la misma carpeta. En Windows, use un entorno Linux como WSL."
-
 #. {ph0}: <code>JAVA_HOME</code>
 #. {ph1}: <code>PATH</code>
-#: website/public/showcase/aegis/index.html:719
+#: website/public/showcase/aegis/index.html:722
 #, python-brace-format
 msgctxt "page:showcase/aegis/index.html"
 msgid ""
@@ -7014,18 +6988,18 @@ msgstr ""
 "El análisis de Android necesita un JDK 17 completo o posterior. Selecciónelo"
 " con {ph0} o {ph1}. Este caso usó JDK 21."
 
-#: website/public/showcase/aegis/index.html:735
+#: website/public/showcase/aegis/index.html:738
 msgctxt "page:showcase/aegis/index.html"
 msgid "Point REA at the provider file and inspect the APK:"
 msgstr "Apunte REA al archivo del proveedor e inspeccione el APK :"
 
-#: website/public/showcase/aegis/index.html:738
+#: website/public/showcase/aegis/index.html:741
 msgctxt "page:showcase/aegis/index.html"
 msgid "macOS / Linux"
 msgstr "macOS / Linux"
 
 #. {ph0}: <code>REA_JADX_MCP_JAR</code>
-#: website/public/showcase/aegis/index.html:752
+#: website/public/showcase/aegis/index.html:755
 #, python-brace-format
 msgctxt "page:showcase/aegis/index.html"
 msgid ""
@@ -7038,7 +7012,7 @@ msgstr ""
 
 #. {ph0}: <strong >
 #. {ph1}: </strong >
-#: website/public/showcase/aegis/index.html:757
+#: website/public/showcase/aegis/index.html:760
 #, python-brace-format
 msgctxt "page:showcase/aegis/index.html"
 msgid ""
@@ -7048,7 +7022,7 @@ msgstr ""
 "Una pregunta siguiente: {ph0}¿qué sucede cuando una cuenta usa ocho dígitos "
 "o un intervalo de tiempo diferente?{ph1}"
 
-#: website/public/showcase/aegis/index.html:767
+#: website/public/showcase/aegis/index.html:770
 msgctxt "page:showcase/aegis/index.html"
 msgid "Sources"
 msgstr "Fuentes"
@@ -7064,7 +7038,7 @@ msgstr "Fuentes"
 #. href="https://github.com/beemdevelopment/Aegis/blob/d6f4e5925a97e4e91593f1542085eae03432a759/LICENSE"
 #. >
 #. {ph5}: </a >
-#: website/public/showcase/aegis/index.html:769
+#: website/public/showcase/aegis/index.html:772
 #, python-brace-format
 msgctxt "page:showcase/aegis/index.html"
 msgid ""
@@ -7078,7 +7052,7 @@ msgstr ""
 #. {ph1}: </a >
 #. {ph2}: <a href="test-vectors.json">
 #. {ph3}: </a>
-#: website/public/showcase/aegis/index.html:785
+#: website/public/showcase/aegis/index.html:788
 #, python-brace-format
 msgctxt "page:showcase/aegis/index.html"
 msgid "{ph0}RFC 6238 reference cases{ph1} · {ph2}Demo test data{ph3}"
@@ -7086,7 +7060,7 @@ msgstr ""
 "{ph0}Casos de referencia RFC 6238{ph1} · {ph2}Datos de prueba de "
 "demostración{ph3}"
 
-#: website/public/showcase/aegis/index.html:792
+#: website/public/showcase/aegis/index.html:795
 msgctxt "page:showcase/aegis/index.html"
 msgid ""
 "Inspected with REA 6.1.0 on 9 October 2026. Decompiled excerpts are credited"
@@ -7132,12 +7106,12 @@ msgctxt "page:showcase/aegis/index.html"
 msgid "Follow the login-code calculation"
 msgstr "Siga el cálculo del código de inicio de sesión"
 
-#: website/public/showcase/aegis/index.html:739
+#: website/public/showcase/aegis/index.html:742
 msgctxt "page:showcase/aegis/index.html"
 msgid "Copy APK inspection command"
 msgstr "Copie el comando de inspección APK"
 
-#: website/public/showcase/aegis/index.html:817
+#: website/public/showcase/aegis/index.html:820
 msgctxt "page:showcase/aegis/index.html"
 msgid "Back to top"
 msgstr "Volver arriba"
@@ -10968,13 +10942,13 @@ msgstr "Guías"
 #: website/public/examples/dino-lab/index.html:476
 #: website/public/faq/index.html:574
 #: website/public/first-investigation/index.html:535
-#: website/public/get-started/index.html:1818
+#: website/public/get-started/index.html:1821
 #: website/public/guides/browser/index.html:508
 #: website/public/guides/index.html:302
 #: website/public/guides/javascript/index.html:512
-#: website/public/guides/native/index.html:510
+#: website/public/guides/native/index.html:511
 #: website/public/guides/rl-environments/index.html:499
-#: website/public/index.html:1304 website/public/showcase/aegis/index.html:809
+#: website/public/index.html:1304 website/public/showcase/aegis/index.html:812
 #: website/public/showcase/ctf/index.html:778
 #: website/public/showcase/dx-ball/index.html:786
 #: website/public/showcase/index.html:338
@@ -10991,13 +10965,13 @@ msgstr "Código fuente"
 #: website/public/examples/dino-lab/index.html:477
 #: website/public/faq/index.html:575
 #: website/public/first-investigation/index.html:536
-#: website/public/get-started/index.html:1819
+#: website/public/get-started/index.html:1822
 #: website/public/guides/browser/index.html:509
 #: website/public/guides/index.html:303
 #: website/public/guides/javascript/index.html:513
-#: website/public/guides/native/index.html:511
+#: website/public/guides/native/index.html:512
 #: website/public/guides/rl-environments/index.html:500
-#: website/public/index.html:1305 website/public/showcase/aegis/index.html:810
+#: website/public/index.html:1305 website/public/showcase/aegis/index.html:813
 #: website/public/showcase/ctf/index.html:779
 #: website/public/showcase/dx-ball/index.html:787
 #: website/public/showcase/index.html:339
@@ -11014,13 +10988,13 @@ msgstr "Licencia MIT"
 #: website/public/examples/dino-lab/index.html:478
 #: website/public/faq/index.html:576
 #: website/public/first-investigation/index.html:537
-#: website/public/get-started/index.html:1820
+#: website/public/get-started/index.html:1823
 #: website/public/guides/browser/index.html:510
 #: website/public/guides/index.html:304
 #: website/public/guides/javascript/index.html:514
-#: website/public/guides/native/index.html:512
+#: website/public/guides/native/index.html:513
 #: website/public/guides/rl-environments/index.html:501
-#: website/public/index.html:1306 website/public/showcase/aegis/index.html:811
+#: website/public/index.html:1306 website/public/showcase/aegis/index.html:814
 #: website/public/showcase/ctf/index.html:780
 #: website/public/showcase/dx-ball/index.html:788
 #: website/public/showcase/index.html:340
@@ -11037,13 +11011,13 @@ msgstr "Únete a la comunidad"
 #: website/public/examples/dino-lab/index.html:479
 #: website/public/faq/index.html:577
 #: website/public/first-investigation/index.html:538
-#: website/public/get-started/index.html:1821
+#: website/public/get-started/index.html:1824
 #: website/public/guides/browser/index.html:511
 #: website/public/guides/index.html:305
 #: website/public/guides/javascript/index.html:515
-#: website/public/guides/native/index.html:513
+#: website/public/guides/native/index.html:514
 #: website/public/guides/rl-environments/index.html:502
-#: website/public/index.html:1307 website/public/showcase/aegis/index.html:812
+#: website/public/index.html:1307 website/public/showcase/aegis/index.html:815
 #: website/public/showcase/ctf/index.html:781
 #: website/public/showcase/dx-ball/index.html:789
 #: website/public/showcase/index.html:341
@@ -11128,22 +11102,22 @@ msgctxt "page:guides/javascript/index.html"
 msgid "REA result · summary.ipc excerpt"
 msgstr "REA resultado · resumen.extracto de ipc"
 
-#: website/public/guides/native/index.html:391
+#: website/public/guides/native/index.html:392
 msgctxt "page:guides/native/index.html"
 msgid "REA instruction excerpt · 0x406409"
 msgstr "Extracto de instrucciones REA * 0x406409"
 
-#: website/public/guides/native/index.html:405
+#: website/public/guides/native/index.html:406
 msgctxt "page:guides/native/index.html"
 msgid "REA caller excerpt · 0x411f5b"
 msgstr "Extracto de la persona que llama REA * 0x411f5b"
 
-#: website/public/guides/native/index.html:419
+#: website/public/guides/native/index.html:420
 msgctxt "page:guides/native/index.html"
 msgid "REA byte results · interpreted as little-endian doubles"
 msgstr "Resultados de bytes REA * interpretados como dobles little-endian"
 
-#: website/public/guides/native/index.html:436
+#: website/public/guides/native/index.html:437
 msgctxt "page:guides/native/index.html"
 msgid "Recovered C · excerpt"
 msgstr "Extracto recuperado de C *"
@@ -11204,12 +11178,12 @@ msgctxt "page:showcase/aegis/index.html"
 msgid "REA · generateOTP, complete body"
 msgstr "REA * generateOTP, cuerpo completo"
 
-#: website/public/showcase/aegis/index.html:725
+#: website/public/showcase/aegis/index.html:728
 msgctxt "page:showcase/aegis/index.html"
 msgid "Download Aegis APK"
 msgstr "Descargar Aegis APK"
 
-#: website/public/showcase/aegis/index.html:729
+#: website/public/showcase/aegis/index.html:732
 msgctxt "page:showcase/aegis/index.html"
 msgid "Download Android analysis provider"
 msgstr "Descargar proveedor de análisis de Android"
@@ -13943,11 +13917,6 @@ msgctxt "page:get-started/index.html"
 msgid "Unavailable"
 msgstr "No disponible"
 
-#: website/public/get-started/index.html:1011
-msgctxt "page:get-started/index.html"
-msgid "Supported distributions"
-msgstr "Distribuciones compatibles"
-
 #: website/public/get-started/index.html:1015
 msgctxt "page:get-started/index.html"
 msgid "x64 · experimental"
@@ -13985,17 +13954,7 @@ msgstr ""
 "cuando Hopper se abra por primera vez. En Linux, la configuración prepara la"
 " demostración compatible y su pantalla privada."
 
-#: website/public/get-started/index.html:1041
-msgctxt "page:get-started/index.html"
-msgid ""
-"Linux hosts: Ubuntu 24.04+, Fedora 41+, Nobara 44+, Arch Linux, CachyOS or "
-"Omarchy. Hopper is commercial software; its demo has vendor-defined limits."
-msgstr ""
-"Hosts Linux: Ubuntu 24.04+, Fedora 41+, Nobara 44+, Arch Linux, CachyOS u "
-"Omarchy. Hopper es software comercial; su demostración tiene límites "
-"definidos por el fabricante."
-
-#: website/public/get-started/index.html:1060
+#: website/public/get-started/index.html:1063
 msgctxt "page:get-started/index.html"
 msgid ""
 "If macOS asks for Automation permission, allow the app that starts REA in "
@@ -14009,18 +13968,18 @@ msgstr ""
 #. href="https://github.com/morluto/rea/blob/main/docs/installation.md#hopper"
 #. >
 #. {ph1}: </a >
-#: website/public/get-started/index.html:1065
+#: website/public/get-started/index.html:1068
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Hopper setup and troubleshooting{ph1}"
 msgstr "{ph0}Configuración de Hopper y solución de problemas{ph1}"
 
-#: website/public/get-started/index.html:1073
+#: website/public/get-started/index.html:1076
 msgctxt "page:get-started/index.html"
 msgid "Ghidra · install the free analysis tool and Java"
 msgstr "Ghidra · instala la herramienta de análisis gratuita y Java"
 
-#: website/public/get-started/index.html:1077
+#: website/public/get-started/index.html:1080
 msgctxt "page:get-started/index.html"
 msgid ""
 "Install a 64-bit JDK 21 or newer, including the Java compiler. Choose the "
@@ -14031,7 +13990,7 @@ msgstr ""
 "ordenador."
 
 #. {ph0}: <code>ghidra_…_PUBLIC_….zip</code>
-#: website/public/get-started/index.html:1082
+#: website/public/get-started/index.html:1085
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14044,7 +14003,7 @@ msgstr ""
 #. {ph0}: <code>ghidraRun</code>
 #. {ph1}: <code>ghidraRun.bat</code>
 #. {ph2}: <code>GHIDRA_INSTALL_DIR</code>
-#: website/public/get-started/index.html:1087
+#: website/public/get-started/index.html:1090
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14060,7 +14019,7 @@ msgstr ""
 #. href="https://github.com/NationalSecurityAgency/ghidra/releases/tag/Ghidra_12.1.4_build"
 #. >
 #. {ph3}: </a >
-#: website/public/get-started/index.html:1093
+#: website/public/get-started/index.html:1096
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Download a JDK{ph1} · {ph2}Download Ghidra 12.1.4{ph3}"
@@ -14068,7 +14027,7 @@ msgstr "{ph0}Descargar un JDK{ph1} · {ph2}Descargar Ghidra 12.1.4{ph3}"
 
 #. {ph0}: <code>java.home</code>
 #. {ph1}: <code>JAVA_HOME</code>
-#: website/public/get-started/index.html:1103
+#: website/public/get-started/index.html:1106
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14078,7 +14037,7 @@ msgstr ""
 "Comprueba Java. El primer comando muestra {ph0}; usa esa carpeta para {ph1}."
 " El segundo confirma que el compilador está instalado:"
 
-#: website/public/get-started/index.html:1219
+#: website/public/get-started/index.html:1222
 msgctxt "page:get-started/index.html"
 msgid ""
 "Keep these commands in the same terminal session. Rerun setup after setting "
@@ -14096,7 +14055,7 @@ msgstr ""
 #. {ph2}: <a href="https://github.com/morluto/rea/blob/main/docs/windows-
 #. ghidra-p0.md" >
 #. {ph3}: </a >
-#: website/public/get-started/index.html:1224
+#: website/public/get-started/index.html:1227
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14106,12 +14065,12 @@ msgstr ""
 "{ph0}Configuración de Ghidra y requisitos de arquitectura{ph1} · {ph2}Guía "
 "de Ghidra en Windows{ph3}"
 
-#: website/public/get-started/index.html:1237
+#: website/public/get-started/index.html:1240
 msgctxt "page:get-started/index.html"
 msgid "IDA · connect an existing installation"
 msgstr "IDA · conecta una instalación existente"
 
-#: website/public/get-started/index.html:1238
+#: website/public/get-started/index.html:1241
 msgctxt "page:get-started/index.html"
 msgid ""
 "Use the IDA provider guide to prepare an upstream MCP registration. Choose "
@@ -14123,7 +14082,7 @@ msgstr ""
 "original abierto o un supervisor sin interfaz gráfica que abra una base de "
 "datos privada."
 
-#: website/public/get-started/index.html:1243
+#: website/public/get-started/index.html:1246
 msgctxt "page:get-started/index.html"
 msgid ""
 "Verified profiles include the Windows legacy GUI and headless supervisor, "
@@ -14136,7 +14095,7 @@ msgstr ""
 "opcional de la interfaz gráfica tiene sus propios requisitos de versión y "
 "plataforma."
 
-#: website/public/get-started/index.html:1338
+#: website/public/get-started/index.html:1341
 msgctxt "page:get-started/index.html"
 msgid ""
 "Use the JSON registration file you prepared with the provider guide, then "
@@ -14148,14 +14107,14 @@ msgstr ""
 #. {ph0}: <a href="https://github.com/morluto/rea/blob/main/docs/ida-
 #. provider.md" >
 #. {ph1}: </a >
-#: website/public/get-started/index.html:1342
+#: website/public/get-started/index.html:1345
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}IDA profiles, registration examples and verified platforms{ph1}"
 msgstr ""
 "{ph0}Perfiles de IDA, ejemplos de registro y plataformas verificadas{ph1}"
 
-#: website/public/get-started/index.html:1350
+#: website/public/get-started/index.html:1353
 msgctxt "page:get-started/index.html"
 msgid ""
 "Once connected, give your agent the original executable's full path and name"
@@ -14166,18 +14125,18 @@ msgstr ""
 
 #. {ph0}: <a href="../guides/native/">
 #. {ph1}: </a>
-#: website/public/get-started/index.html:1362
+#: website/public/get-started/index.html:1365
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Follow a native analysis example{ph1}"
 msgstr "{ph0}Sigue un ejemplo de análisis nativo{ph1}"
 
-#: website/public/get-started/index.html:1367
+#: website/public/get-started/index.html:1370
 msgctxt "page:get-started/index.html"
 msgid "Websites, Android, .NET, firmware and other targets"
 msgstr "Sitios web, Android, .NET, firmware y otros objetivos"
 
-#: website/public/get-started/index.html:1370
+#: website/public/get-started/index.html:1373
 msgctxt "page:get-started/index.html"
 msgid ""
 "Open the guide for the target you have. Each guide gives the additional "
@@ -14186,110 +14145,110 @@ msgstr ""
 "Abre la guía del tipo de objetivo que tienes. Cada guía indica las "
 "herramientas adicionales, los hosts compatibles y el primer comando."
 
-#: website/public/get-started/index.html:1378
+#: website/public/get-started/index.html:1381
 msgctxt "page:get-started/index.html"
 msgid "Target"
 msgstr "Objetivo"
 
-#: website/public/get-started/index.html:1379
+#: website/public/get-started/index.html:1382
 msgctxt "page:get-started/index.html"
 msgid "Tools to prepare"
 msgstr "Herramientas necesarias"
 
-#: website/public/get-started/index.html:1380
+#: website/public/get-started/index.html:1383
 msgctxt "page:get-started/index.html"
 msgid "Guide"
 msgstr "Guía"
 
-#: website/public/get-started/index.html:1385
+#: website/public/get-started/index.html:1388
 msgctxt "page:get-started/index.html"
 msgid "JavaScript / Electron"
 msgstr "JavaScript / Electron"
 
 #. {ph0}: <a href="../guides/javascript/">
 #. {ph1}: </a>
-#: website/public/get-started/index.html:1387
-#: website/public/get-started/index.html:1392
-#: website/public/get-started/index.html:1397
-#: website/public/get-started/index.html:1407
-#: website/public/get-started/index.html:1417
-#: website/public/get-started/index.html:1427
-#: website/public/get-started/index.html:1437
-#: website/public/get-started/index.html:1447
-#: website/public/get-started/index.html:1457
-#: website/public/get-started/index.html:1467
-#: website/public/get-started/index.html:1477
-#: website/public/get-started/index.html:1487
-#: website/public/get-started/index.html:1497
-#: website/public/get-started/index.html:1507
-#: website/public/get-started/index.html:1517
-#: website/public/get-started/index.html:1527
+#: website/public/get-started/index.html:1390
+#: website/public/get-started/index.html:1395
+#: website/public/get-started/index.html:1400
+#: website/public/get-started/index.html:1410
+#: website/public/get-started/index.html:1420
+#: website/public/get-started/index.html:1430
+#: website/public/get-started/index.html:1440
+#: website/public/get-started/index.html:1450
+#: website/public/get-started/index.html:1460
+#: website/public/get-started/index.html:1470
+#: website/public/get-started/index.html:1480
+#: website/public/get-started/index.html:1490
+#: website/public/get-started/index.html:1500
+#: website/public/get-started/index.html:1510
+#: website/public/get-started/index.html:1520
+#: website/public/get-started/index.html:1530
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Open guide{ph1}"
 msgstr "{ph0}Abrir guía{ph1}"
 
-#: website/public/get-started/index.html:1390
+#: website/public/get-started/index.html:1393
 msgctxt "page:get-started/index.html"
 msgid "Website"
 msgstr "Sitio web"
 
-#: website/public/get-started/index.html:1395
+#: website/public/get-started/index.html:1398
 msgctxt "page:get-started/index.html"
 msgid ".NET / Flutter / packages"
 msgstr ".NET / Flutter / paquetes"
 
-#: website/public/get-started/index.html:1405
+#: website/public/get-started/index.html:1408
 msgctxt "page:get-started/index.html"
 msgid "Android APK"
 msgstr "APK de Android"
 
-#: website/public/get-started/index.html:1415
+#: website/public/get-started/index.html:1418
 msgctxt "page:get-started/index.html"
 msgid "Android device"
 msgstr "Dispositivo Android"
 
-#: website/public/get-started/index.html:1425
+#: website/public/get-started/index.html:1428
 msgctxt "page:get-started/index.html"
 msgid "Android resources"
 msgstr "Recursos de Android"
 
-#: website/public/get-started/index.html:1435
+#: website/public/get-started/index.html:1438
 msgctxt "page:get-started/index.html"
 msgid "JEB project"
 msgstr "Proyecto JEB"
 
-#: website/public/get-started/index.html:1445
+#: website/public/get-started/index.html:1448
 msgctxt "page:get-started/index.html"
 msgid "Firmware"
 msgstr "Firmware"
 
-#: website/public/get-started/index.html:1455
+#: website/public/get-started/index.html:1458
 msgctxt "page:get-started/index.html"
 msgid "WASM"
 msgstr "WASM"
 
-#: website/public/get-started/index.html:1485
+#: website/public/get-started/index.html:1488
 msgctxt "page:get-started/index.html"
 msgid "ELF / Linux crash"
 msgstr "ELF / fallo de Linux"
 
-#: website/public/get-started/index.html:1495
+#: website/public/get-started/index.html:1498
 msgctxt "page:get-started/index.html"
 msgid "HAR / SAZ / mitmproxy"
 msgstr "HAR / SAZ / mitmproxy"
 
-#: website/public/get-started/index.html:1505
+#: website/public/get-started/index.html:1508
 msgctxt "page:get-started/index.html"
 msgid "PCAP / PCAPNG"
 msgstr "PCAP / PCAPNG"
 
-#: website/public/get-started/index.html:1515
+#: website/public/get-started/index.html:1518
 msgctxt "page:get-started/index.html"
 msgid "Logic signals"
 msgstr "Señales lógicas"
 
-#: website/public/get-started/index.html:1525
+#: website/public/get-started/index.html:1528
 msgctxt "page:get-started/index.html"
 msgid "Process behavior"
 msgstr "Comportamiento de procesos"
@@ -14305,7 +14264,7 @@ msgstr "Comportamiento de procesos"
 #. {ph5}: </a >
 #. {ph6}: <a href="../guides/">
 #. {ph7}: </a>
-#: website/public/get-started/index.html:1537
+#: website/public/get-started/index.html:1540
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14315,18 +14274,18 @@ msgstr ""
 "{ph0}Guía de Flutter{ph1} · {ph2}Paquetes y recursos{ph3} · {ph4}Bytecode de"
 " EVM{ph5} · {ph6}Todas las guías de investigación{ph7}"
 
-#: website/public/get-started/index.html:1557
+#: website/public/get-started/index.html:1560
 msgctxt "page:get-started/index.html"
 msgid "Use REA from a terminal"
 msgstr "Usa REA desde una terminal"
 
-#: website/public/get-started/index.html:1559
+#: website/public/get-started/index.html:1562
 msgctxt "page:get-started/index.html"
 msgid "CLI commands, global installation and curl"
 msgstr "Comandos CLI, instalación global y curl"
 
 #. {ph0}: <code>main</code>
-#: website/public/get-started/index.html:1656
+#: website/public/get-started/index.html:1659
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14336,7 +14295,7 @@ msgstr ""
 "Sustituye {ph0} por un nombre o una dirección de función de la lista de "
 "funciones del objetivo. Ghidra debe estar configurado previamente."
 
-#: website/public/get-started/index.html:1660
+#: website/public/get-started/index.html:1663
 msgctxt "page:get-started/index.html"
 msgid ""
 "On macOS or Linux, you can also use the curl installer after preparing "
@@ -14345,7 +14304,7 @@ msgstr ""
 "En macOS o Linux también puedes usar el instalador curl después de preparar "
 "Node.js:"
 
-#: website/public/get-started/index.html:1698
+#: website/public/get-started/index.html:1701
 msgctxt "page:get-started/index.html"
 msgid ""
 "Use the client check in step 3 with your setup ID. In editor clients, enable"
@@ -14355,12 +14314,12 @@ msgstr ""
 "configuración. En los clientes que son editores, activa REA en los ajustes "
 "MCP y autoriza sus herramientas en el chat del agente."
 
-#: website/public/get-started/index.html:1726
+#: website/public/get-started/index.html:1729
 msgctxt "page:get-started/index.html"
 msgid "Windows, WSL and paths with spaces"
 msgstr "Windows, WSL y rutas con espacios"
 
-#: website/public/get-started/index.html:1727
+#: website/public/get-started/index.html:1730
 msgctxt "page:get-started/index.html"
 msgid ""
 "Use Windows PowerShell for Windows clients and analysis tools. If your agent"
@@ -14372,17 +14331,17 @@ msgstr ""
 " entorno Linux y usa allí rutas de Linux. Los proveedores sin interfaz "
 "gráfica se ejecutan en el mismo host que REA."
 
-#: website/public/get-started/index.html:1736
+#: website/public/get-started/index.html:1739
 msgctxt "page:get-started/index.html"
 msgid "Windows setup command:"
 msgstr "Comando de configuración para Windows:"
 
-#: website/public/get-started/index.html:1753
+#: website/public/get-started/index.html:1756
 msgctxt "page:get-started/index.html"
 msgid "Update or remove REA"
 msgstr "Actualiza o elimina REA"
 
-#: website/public/get-started/index.html:1754
+#: website/public/get-started/index.html:1757
 msgctxt "page:get-started/index.html"
 msgid ""
 "To refresh your agent connection, run the latest setup command again, review"
@@ -14393,7 +14352,7 @@ msgstr ""
 
 #. {ph0}: <code>rea update</code>
 #. {ph1}: <code>npx rea-agents@latest uninstall</code>
-#: website/public/get-started/index.html:1772
+#: website/public/get-started/index.html:1775
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14407,7 +14366,7 @@ msgstr ""
 #. href="https://github.com/morluto/rea/blob/main/docs/installation.md#diagnose-
 #. update-and-remove" >
 #. {ph1}: </a >
-#: website/public/get-started/index.html:1778
+#: website/public/get-started/index.html:1781
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Update and uninstall details{ph1}"
@@ -14430,18 +14389,18 @@ msgstr "Copiar el comando de configuración de REA para Windows"
 #: website/public/get-started/index.html:801
 #: website/public/get-started/index.html:816
 #: website/public/get-started/index.html:864
-#: website/public/get-started/index.html:1049
-#: website/public/get-started/index.html:1111
-#: website/public/get-started/index.html:1134
-#: website/public/get-started/index.html:1158
-#: website/public/get-started/index.html:1206
-#: website/public/get-started/index.html:1281
-#: website/public/get-started/index.html:1307
-#: website/public/get-started/index.html:1324
-#: website/public/get-started/index.html:1645
-#: website/public/get-started/index.html:1667
-#: website/public/get-started/index.html:1740
-#: website/public/get-started/index.html:1761
+#: website/public/get-started/index.html:1052
+#: website/public/get-started/index.html:1114
+#: website/public/get-started/index.html:1137
+#: website/public/get-started/index.html:1161
+#: website/public/get-started/index.html:1209
+#: website/public/get-started/index.html:1284
+#: website/public/get-started/index.html:1310
+#: website/public/get-started/index.html:1327
+#: website/public/get-started/index.html:1648
+#: website/public/get-started/index.html:1670
+#: website/public/get-started/index.html:1743
+#: website/public/get-started/index.html:1764
 msgctxt "page:get-started/index.html"
 msgid "Copy command"
 msgstr "Copiar comando"
@@ -14497,14 +14456,14 @@ msgctxt "page:get-started/index.html"
 msgid "OpenCode · choose an AI model"
 msgstr "OpenCode · elige un modelo de IA"
 
-#: website/public/get-started/index.html:1265
+#: website/public/get-started/index.html:1268
 msgctxt "page:get-started/index.html"
 msgid "Prepare the IDA registration file"
 msgstr "Prepara el archivo de registro de IDA"
 
 #. {ph0}: <code>ida-mcp.json</code>
 #. {ph1}: <code>.txt</code>
-#: website/public/get-started/index.html:1266
+#: website/public/get-started/index.html:1269
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14520,7 +14479,7 @@ msgstr ""
 #. {ph0}: <code>idb_open</code>
 #. {ph1}: <code>idb_list</code>
 #. {ph2}: <code>idb_close</code>
-#: website/public/get-started/index.html:1273
+#: website/public/get-started/index.html:1276
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14533,7 +14492,7 @@ msgstr ""
 #. {ph0}: <code>command</code>
 #. {ph1}: <code>args</code>
 #. {ph2}: <code>env</code>
-#: website/public/get-started/index.html:1296
+#: website/public/get-started/index.html:1299
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -14546,12 +14505,12 @@ msgstr ""
 " binario original en IDA e inicia el complemento de ese servidor antes de "
 "pedir a REA que lo inspeccione."
 
-#: website/public/get-started/index.html:1465
+#: website/public/get-started/index.html:1468
 msgctxt "page:get-started/index.html"
 msgid "SQLite database"
 msgstr "Base de datos SQLite"
 
-#: website/public/get-started/index.html:1475
+#: website/public/get-started/index.html:1478
 msgctxt "page:get-started/index.html"
 msgid "EVM bytecode"
 msgstr "Bytecode de EVM"
@@ -14610,7 +14569,7 @@ msgstr ""
 "Revisa y aprueba el plan, vuelve a abrir Claude y {ph0}comprueba la conexión"
 " en el paso 3{ph1}."
 
-#: website/public/get-started/index.html:1170
+#: website/public/get-started/index.html:1173
 msgctxt "page:get-started/index.html"
 msgid ""
 "Replace both paths with your existing installations. For a fresh macOS or "
@@ -14621,12 +14580,12 @@ msgstr ""
 "instalación nueva de macOS o Linux arm64, compila el descompilador nativo "
 "para tu ordenador antes de continuar."
 
-#: website/public/get-started/index.html:1176
+#: website/public/get-started/index.html:1179
 msgctxt "page:get-started/index.html"
 msgid "Build Ghidra's native decompiler"
 msgstr "Compila el descompilador nativo de Ghidra"
 
-#: website/public/get-started/index.html:1177
+#: website/public/get-started/index.html:1180
 msgctxt "page:get-started/index.html"
 msgid ""
 "On macOS, the build needs Xcode Command Line Tools, make and bison. Use the "
@@ -14639,7 +14598,7 @@ msgstr ""
 #. href="https://github.com/morluto/rea/blob/main/docs/installation.md#missing-
 #. macos-native-decompiler" >
 #. {ph1}: </a >
-#: website/public/get-started/index.html:1182
+#: website/public/get-started/index.html:1185
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}macOS · Intel{ph1}"
@@ -14649,7 +14608,7 @@ msgstr "{ph0}macOS · Intel{ph1}"
 #. href="https://github.com/morluto/rea/blob/main/docs/installation.md#macos-
 #. arm64-native-decompiler" >
 #. {ph1}: </a >
-#: website/public/get-started/index.html:1188
+#: website/public/get-started/index.html:1191
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}macOS · Apple Silicon{ph1}"
@@ -14659,13 +14618,13 @@ msgstr "{ph0}macOS · Apple Silicon{ph1}"
 #. href="https://github.com/NationalSecurityAgency/ghidra/blob/Ghidra_12.1.4_build/GhidraDocs/GettingStarted.md#building-
 #. native-components" >
 #. {ph1}: </a >
-#: website/public/get-started/index.html:1194
+#: website/public/get-started/index.html:1197
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid "{ph0}Linux arm64 · native build instructions{ph1}"
 msgstr "{ph0}Linux arm64 · instrucciones de compilación nativa{ph1}"
 
-#: website/public/get-started/index.html:1202
+#: website/public/get-started/index.html:1205
 msgctxt "page:get-started/index.html"
 msgid "Then check Ghidra and save its paths for your client:"
 msgstr "Después, comprueba Ghidra y guarda sus rutas para tu cliente:"
@@ -15069,7 +15028,7 @@ msgid "Other install options: {ph0}{ph1} →{ph2}"
 msgstr "Otras formas de instalación: {ph0}{ph1} →{ph2}"
 
 #. {ph0}: <code>rea setup</code>
-#: website/public/get-started/index.html:1678
+#: website/public/get-started/index.html:1681
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -15084,7 +15043,7 @@ msgstr ""
 #. setup" >
 #. {ph1}: </a >
 #. {ph2}: <code>6.4.0</code>
-#: website/public/get-started/index.html:1249
+#: website/public/get-started/index.html:1252
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -15099,7 +15058,7 @@ msgstr ""
 #. {ph0}: <code>node scripts/rea.mjs doctor --provider ida --json</code>
 #. {ph1}: <code>node scripts/rea.mjs setup</code>
 #. {ph2}: <code>npx</code>
-#: website/public/get-started/index.html:1258
+#: website/public/get-started/index.html:1261
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -15111,7 +15070,7 @@ msgstr ""
 
 #. {ph0}: <code>rea</code>
 #. {ph1}: <code>"$HOME/.local/bin/rea" setup</code>
-#: website/public/get-started/index.html:1682
+#: website/public/get-started/index.html:1685
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -15122,7 +15081,7 @@ msgstr ""
 "instalador. En Linux, el comando de configuración predeterminado es {ph1}."
 
 #. {ph0}: <code>/absolute/path/to/program</code>
-#: website/public/get-started/index.html:1355
+#: website/public/get-started/index.html:1358
 #, python-brace-format
 msgctxt "page:get-started/index.html"
 msgid ""
@@ -15141,13 +15100,13 @@ msgstr ""
 #: website/public/examples/dino-lab/index.html:475
 #: website/public/faq/index.html:573
 #: website/public/first-investigation/index.html:534
-#: website/public/get-started/index.html:1817
+#: website/public/get-started/index.html:1820
 #: website/public/guides/browser/index.html:507
 #: website/public/guides/index.html:301
 #: website/public/guides/javascript/index.html:511
-#: website/public/guides/native/index.html:509
+#: website/public/guides/native/index.html:510
 #: website/public/guides/rl-environments/index.html:498
-#: website/public/index.html:1303 website/public/showcase/aegis/index.html:808
+#: website/public/index.html:1303 website/public/showcase/aegis/index.html:811
 #: website/public/showcase/ctf/index.html:777
 #: website/public/showcase/dx-ball/index.html:785
 #: website/public/showcase/index.html:337
@@ -16018,6 +15977,82 @@ msgid ""
 "renderer has since changed; the recorded source locations accompany the API,"
 " channel and handler findings."
 msgstr ""
+
+#: website/public/get-started/index.html:1011
+msgctxt "page:get-started/index.html"
+msgid "x86_64 installer on supported distributions"
+msgstr ""
+
+#: website/public/get-started/index.html:1041
+msgctxt "page:get-started/index.html"
+msgid ""
+"Automated Linux setup requires an x86_64 host running Ubuntu 24.04+, Fedora "
+"41+, Nobara 44+, Arch Linux, CachyOS or Omarchy. An existing Hopper launcher"
+" can also be configured on other supported Linux distributions. On other "
+"Linux architectures, use Ghidra. Hopper is commercial software; its demo has"
+" vendor-defined limits."
+msgstr ""
+
+#. {ph0}: <strong>
+#. {ph1}: </strong>
+#: website/public/guides/native/index.html:316
+#, python-brace-format
+msgctxt "page:guides/native/index.html"
+msgid ""
+"{ph0}Hopper{ph1} (macOS or Linux): REA's setup detects it or offers to "
+"install it. On macOS, open Hopper once and choose demo mode or activate a "
+"license before your first analysis. Automated Linux setup requires x86_64; "
+"use Ghidra on other Linux architectures."
+msgstr ""
+
+#. {ph0}: <a href="../../get-started/">
+#. {ph1}: </a>
+#. {ph2}: <a href="https://github.com/morluto/rea/blob/main/docs/android-
+#. analysis.md">
+#. {ph3}: </a>
+#: website/public/showcase/aegis/index.html:714
+#, python-brace-format
+msgctxt "page:showcase/aegis/index.html"
+msgid ""
+"{ph0}Set up REA{ph1}, then download these two files into the same folder. On"
+" Windows x64, use a package with matching Windows native controls and owned "
+"protocol stdin support; see the {ph2}Android provider guide{ph3} for "
+"prerequisites and PowerShell setup. A Linux environment such as WSL is "
+"another option."
+msgstr ""
+
+#, python-brace-format
+#~ msgctxt "page:showcase/aegis/index.html"
+#~ msgid ""
+#~ "{ph0}Set up REA{ph1} on macOS or Linux, then download these two files into "
+#~ "the same folder. On Windows, use a Linux environment such as WSL."
+#~ msgstr ""
+#~ "{ph0}Configurar REA {ph1} en macOS o Linux , descargue estos dos archivos en"
+#~ " la misma carpeta. En Windows, use un entorno Linux como WSL."
+
+#, python-brace-format
+#~ msgctxt "page:guides/native/index.html"
+#~ msgid ""
+#~ "{ph0}Hopper{ph1} (macOS or Linux): REA's setup detects it or offers to "
+#~ "install it. On macOS, open Hopper once and choose demo mode or activate a "
+#~ "license before your first analysis."
+#~ msgstr ""
+#~ "{ph0} Hopper {ph1} ( macOS o Linux): La configuración de REA lo detecta u "
+#~ "ofrece instalarlo. En macOS , abra Hopper una vez y elija el modo de "
+#~ "demostración o active una licencia antes de su primer análisis."
+
+#~ msgctxt "page:get-started/index.html"
+#~ msgid "Supported distributions"
+#~ msgstr "Distribuciones compatibles"
+
+#~ msgctxt "page:get-started/index.html"
+#~ msgid ""
+#~ "Linux hosts: Ubuntu 24.04+, Fedora 41+, Nobara 44+, Arch Linux, CachyOS or "
+#~ "Omarchy. Hopper is commercial software; its demo has vendor-defined limits."
+#~ msgstr ""
+#~ "Hosts Linux: Ubuntu 24.04+, Fedora 41+, Nobara 44+, Arch Linux, CachyOS u "
+#~ "Omarchy. Hopper es software comercial; su demostración tiene límites "
+#~ "definidos por el fabricante."
 
 #~ msgctxt "page:guides/javascript/index.html"
 #~ msgid ""
