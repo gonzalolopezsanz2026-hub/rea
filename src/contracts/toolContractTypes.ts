@@ -63,4 +63,13 @@ export interface ToolContract<
    */
   readonly returnsTargetContent: boolean;
   readonly examples: readonly ToolExample[];
+  /**
+   * Wire-only projection applied to the advertised input JSON after
+   * presentation. Canonical validation keeps the registered parser, so the
+   * advertisement may guide callers to a bounded form the contract accepts
+   * alongside the complete one.
+   */
+  readonly advertisedInputTransform?: (
+    projected: Record<string, unknown>,
+  ) => Record<string, unknown>;
 }

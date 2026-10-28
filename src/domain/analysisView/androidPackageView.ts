@@ -54,8 +54,21 @@ export const androidManifestViewItemSchema = analysisTextPageItemSchema.extend({
 });
 
 /** Parent-array ordinal and declaration coverage survive every field selection. */
-export const androidComponentViewRowSchema = androidManifestComponentSchema
-  .omit({ declaration_coverage: true })
+const componentFacts = androidManifestComponentSchema.omit({
+  declaration_coverage: true,
+});
+/**
+ * Defaulted declaration facts stay declared but stop applying their defaults
+ * on a page: a projected item carries exactly the caller-selected fields, so
+ * parsing must never materialize a default where projection omitted it.
+ */
+export const androidComponentViewRowSchema = componentFacts
+  .extend({
+    permission_overrides:
+      componentFacts.shape.permission_overrides._def.innerType.optional(),
+    path_permissions:
+      componentFacts.shape.path_permissions._def.innerType.optional(),
+  })
   .partial()
   .extend({
     source_index: z.int().nonnegative(),

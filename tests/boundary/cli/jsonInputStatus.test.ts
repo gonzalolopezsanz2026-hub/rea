@@ -19,6 +19,8 @@ const JSON_COMMANDS = [
   ],
   ["evaluate-reconstruction-coverage", "evaluate-reconstruction-coverage"],
   ["project-android-application-graph", "project-android-application-graph"],
+  ["project-android-jni-names", "project-android-jni-names"],
+  ["project-android-attack-surface", "project-android-attack-surface"],
   ["project-apple-application-graph", "project-apple-application-graph"],
   ["import-managed-reconstruction", "import-managed-reconstruction"],
   ["verify-managed-native-boundaries", "verify-managed-native-boundaries"],

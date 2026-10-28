@@ -75,13 +75,16 @@ export const toolInputSchemaWithMetadata = <Contract extends ToolContract>(
         libraryOptions: { ...options.libraryOptions, reused: "inline" },
       });
       const examples = advertisedInputExamples(contract);
-      return {
+      const presented = {
         // Keep advertised parameters self-contained for clients that do not
         // resolve local references. The registered canonical schema remains
         // responsible for runtime validation.
         ...presentInputJsonSchema(inline, fallbackPropertyDescription),
         ...(examples.length === 0 ? {} : { examples }),
       };
+      return contract.advertisedInputTransform === undefined
+        ? presented
+        : contract.advertisedInputTransform(presented);
     },
   );
 

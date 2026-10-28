@@ -11,6 +11,7 @@ import { parseAndroidManifestComponents } from "./AndroidManifestComponents.js";
 import {
   AnalysisInputError,
   AnalysisOutputError,
+  AnalysisResourceConstraintError,
 } from "../domain/analysisErrorCore.js";
 import type { JsonValue } from "../domain/jsonValue.js";
 import type { AndroidNativeDeclarations } from "../domain/android/androidNativeDeclarations.js";
@@ -19,7 +20,6 @@ import {
   ANDROID_JNI_REPORT_BYTES,
   projectAndroidJniBindings,
 } from "../domain/android/androidJniBindings.js";
-import { AnalysisResourceConstraintError } from "../domain/analysisErrorCore.js";
 import {
   jadxAppSchema,
   type JadxClassPage,
@@ -75,6 +75,7 @@ const methodsOf = (summary: ClassSummary) => {
     seen.set(method.name, index + 1);
     return {
       name: method.name,
+      dex_method_name: method.raw_name,
       reported_signature: method.signature,
       overload_index: index,
       is_constructor: method.is_constructor,
@@ -344,7 +345,7 @@ const inspectMethod = async (
       request.operation,
       "JADX returned a different method or overload inventory",
     );
-  return androidResultSchemas.inspect_android_method.parse({
+  const normalizedMethod = {
     engine,
     class_name: summary.full_name,
     method: selected,
@@ -362,7 +363,9 @@ const inspectMethod = async (
           method.overload_index === selected.overload_index,
       ),
     ]),
-  });
+  };
+  androidResultSchemas.inspect_android_method.parse(normalizedMethod);
+  return normalizedMethod;
 };
 
 /** Normalize only the selected analyst outcome and reject ambiguous engine selectors. */
@@ -415,10 +418,11 @@ export const analyzeJadxRequest = async (
   if (request.operation === "search_android_classes")
     return searchClasses(tools, request, loaded, engine);
   const summary = await classSummary(tools, request);
-  if (request.operation === "inspect_android_class")
-    return androidResultSchemas.inspect_android_class.parse({
+  if (request.operation === "inspect_android_class") {
+    const normalizedClass = {
       engine,
       class_name: summary.full_name,
+      dex_class_name: summary.raw_name,
       methods: methodsOf(summary),
       fields: summary.fields.map((field) => ({
         name: field.name,
@@ -432,7 +436,10 @@ export const analyzeJadxRequest = async (
         ...methodQueries(summary),
         ...fieldQueries(summary),
       ]),
-    });
+    };
+    androidResultSchemas.inspect_android_class.parse(normalizedClass);
+    return normalizedClass;
+  }
   if (request.operation === "inspect_android_method")
     return inspectMethod(tools, request, summary, context);
   return traceReferences(tools, request, summary, engine);

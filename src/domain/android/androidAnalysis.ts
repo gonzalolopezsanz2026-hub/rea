@@ -194,6 +194,12 @@ export const dexStaticValueSchema = z.discriminatedUnion("type", [
 
 const method = z.strictObject({
   name: z.string(),
+  /**
+   * Raw DEX method name; the display name can be a decompiler alias. Evidence
+   * retained before this projection was recorded omits it, so omission stays
+   * unprojected rather than inventing an identity.
+   */
+  dex_method_name: z.string().min(1).optional(),
   reported_signature: z.string(),
   overload_index: z.int().nonnegative(),
   is_constructor: z.boolean(),
@@ -250,6 +256,12 @@ export const androidResultSchemas = {
   inspect_android_class: z.strictObject({
     ...common,
     class_name: z.string(),
+    /**
+     * Raw DEX binary class name (`$` for nested classes). Evidence retained
+     * before this projection was recorded omits it, so omission stays
+     * unprojected rather than inventing an identity.
+     */
+    dex_class_name: z.string().min(1).optional(),
     methods: z.array(method),
     fields: z.array(
       z.strictObject({

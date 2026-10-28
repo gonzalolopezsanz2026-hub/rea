@@ -5,7 +5,9 @@ import { parseCliJsonInput } from "../cliJsonInput.js";
 import { logCliCommand } from "../cliLogging.js";
 import { projectAnalysisError } from "../domain/analysisErrorProjection.js";
 import type { AnalysisError } from "../domain/analysisErrorBase.js";
-import type { JsonValue } from "../domain/jsonValue.js";
+import { androidAttackSurfaceInputSchema } from "../domain/android/androidAttackSurface.js";
+import { androidJniNamesInputSchema } from "../domain/android/androidJniNames.js";
+import { jsonValueSchema, type JsonValue } from "../domain/jsonValue.js";
 import type { Logger } from "pino";
 import { traceJavaScriptSemanticsInputSchema } from "../domain/javascript/javascriptSemanticTraceSchemas.js";
 import { registerSourceToBundleCommand } from "./sourceToBundleCommand.js";
@@ -88,6 +90,38 @@ export const registerApplicationCommands = (
         await import("../application/android/AndroidApplicationService.js");
       const result = projectAndroidApplicationEvidence(input);
       return result.ok ? { ok: true, value: result.value.evidence } : result;
+    },
+  });
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.projectAndroidJniNames,
+    description:
+      "Project expected JNI/JNA symbol names for caller-selected DEX methods",
+    inputSchema: androidJniNamesInputSchema,
+    workflow: async (input) => {
+      const { projectAndroidJniNamesEvidence } =
+        await import("../application/android/AndroidJniNamesService.js");
+      const result = projectAndroidJniNamesEvidence(input);
+      return result.ok
+        ? { ok: true, value: jsonValueSchema.parse(result.value) }
+        : result;
+    },
+  });
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.projectAndroidAttackSurface,
+    description:
+      "Project structural attack-surface facts from Android package declarations",
+    inputSchema: androidAttackSurfaceInputSchema,
+    workflow: async (input) => {
+      const { projectAndroidAttackSurfaceEvidence } =
+        await import("../application/android/AndroidAttackSurfaceService.js");
+      const result = projectAndroidAttackSurfaceEvidence(input);
+      return result.ok
+        ? { ok: true, value: jsonValueSchema.parse(result.value) }
+        : result;
     },
   });
   registerJsonCommand({

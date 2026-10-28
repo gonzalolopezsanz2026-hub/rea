@@ -227,6 +227,71 @@ rea trace-android-references /path/Example.apk example.MainActivity --method-nam
 rea trace-android-references /path/Example.apk example.MainActivity --method-name select --overload-index 1
 ```
 
+Project expected native symbols for DEX-declared methods without opening an APK:
+
+```sh
+rea project-android-jni-names '{"class_name": "example.MainActivity", "methods": [{"method_name": "nativeInit", "dex_descriptor": "()V"}]}'
+```
+
+Equivalent MCP method is `project_android_jni_names`. It reports JNI short/long
+names and the JNA default-mapping name per method from caller-selected
+declarations, so an expected `Java_pkg_Class_method` name can be searched in an
+extracted `.so` with the native providers. `jna_expected_name` is the symbol
+JNA's default mapper derives from the DEX method name; a custom `FunctionMapper`
+or an explicitly named native function binds another symbol, which stays
+unknown. Feed raw DEX identities: `inspect-android-class`
+reports each method's `dex_method_name` and the class's `dex_class_name`, which
+is the binary `$` form for nested classes. Its `class_name` and method `name`
+stay as decompiler display names and can be aliases, so symbols projected from
+them need not exist. Pass the method's `dex_descriptor` too; it may be omitted,
+and an omitted descriptor reports only the short name, which no longer
+identifies one overload. `overload_group_size` counts the distinct descriptors
+in your selection, so a partial selection under-reports the class's overloads.
+A name match is a static binding hypothesis, not proof of loading or
+invocation; `RegisterNatives` registration stays unknown. A call accepts at most
+2000 methods and about 4 MiB of projected symbol text, which the repeated class
+prefix makes the real bound; split a larger selection by class or method group.
+
+Feed the `components` that `inspect-android-package` returns into
+`project_android_attack_surface` to separate exported components without an
+established guard from guarded ones. Components whose permission value is
+unresolved, and every provider with projected `readPermission`/`writePermission`
+overrides, child `<path-permission>` guards, or an inventory that predates
+`permission_overrides`/`path_permissions`, stay in a guard-unknown bucket rather
+than being called unguarded: an override replaces or clears the base permission
+for one operation, a path guard covers only the paths it declares, and neither
+value is projected. It also indexes intent actions and reports foreground-service
+types and provider authorities. A call accepts at most 1000 components, 128
+actions or categories per component, about 1 MiB of selected declaration text and
+about 4 MiB of projected finding text; pass a subset and describe it with
+`component_coverage=partial` for a larger inventory. Findings rank static
+declarations only; protection levels, reachability and exploitability stay
+unknown.
+
+Both projections accept an optional `source_evidence`: pass the
+`inspect-android-package` Evidence for the attack surface, or the
+`inspect-android-class` Evidence for JNI names. The advertisement shows the
+retained reference form `{kind: "retained-evidence", evidence_id}` that each
+adapter resolves against its session ledger; the complete inline record stays
+accepted for portable and CLI callers. The record is authenticated by
+its own identity first, so an edited copy with a stale `evidence_id` is refused.
+Every selected component, class and method is then checked against that record,
+the result copies its artifact subject and links its `evidence_id`, and the
+Evidence parameters record `source_evidence_id`. A selection is narrowed from
+that record, never extended: an edited fact is refused instead of being
+attributed to the artifact, the `package_name` must match the linked inventory,
+`component_coverage: "complete"` requires that inventory to report complete
+coverage and to be passed in full, and the JNI `class_name` must be the raw
+`dex_class_name`, because a decompiler display name can be an alias that projects
+symbols no native library exports. Without a source the projection still records
+the exact selection, states that no source Evidence was linked, and keeps
+`evidence_links` empty, so declarations copied from different APKs stay
+distinguishable only when a source is supplied.
+
+For packed or split targets, follow the
+[packed and split APK playbook](android-packed-analysis.md): static pack
+detection and full split acquisition.
+
 Equivalent MCP methods are `inspect_android_package`, `search_android_classes`,
 `inspect_android_class`, `inspect_android_method` and `trace_android_references`.
 Every request includes `path`. Class/method operations use `class_name`,
@@ -453,6 +518,16 @@ retained Evidence remains historical and independently readable.
   exactly and only its displayed text is subject to the existing source byte cap.
   Summaries use the complete selected XML before that cap. Document types are
   unsupported; parsing does not load external DTDs, schemas, or XInclude files.
+  `components` carries that projection as `status` (`complete`, `partial`, or
+  `unavailable`), `items` and `limitations`: each item names its `kind`,
+  `declared_name` and resolved `name`, the declared `exported` value beside
+  Android's `exported_default` rule, the effective `permission` with its
+  `permission_source`, whether a provider declares `readPermission`/
+  `writePermission` overrides as `permission_overrides`, whether it declares
+  child `<path-permission>` guards as `path_permissions` (`none`, `present`, or
+  `unknown` when the inventory predates that projection), flattened
+  intent-filter `actions` and `categories`, `foreground_service_type`, provider
+  `authorities`, and an explicit `intent_filter_count`.
   Signature verification is explicitly `not_performed`.
 - Class search filters the engine's cached top-level names before transferring
   pages, then follows contiguous inventory positions without rescanning earlier
@@ -472,12 +547,15 @@ retained Evidence remains historical and independently readable.
   anonymous classes. The bridge keeps both identities from JADX; it does not
   replace separators or guess suffix matches. Ambiguous selectors are refused.
   Follow-up calls preserve the selected name, while results report the frozen
-  JADX display name. Quote `$` names in the shell, for example
-  `'com.example.Manager$WorkerThread'`.
+  JADX display name and the raw DEX identities beside it: `dex_class_name` for
+  the binary class name and `dex_method_name` for each method. Quote `$` names
+  in the shell, for example `'com.example.Manager$WorkerThread'`.
   Exact DEX prototypes are reported from frozen JADX method metadata as
-  `dex_descriptor`, for example `(I)V`. Display names can be JADX aliases;
-  the descriptor alone is not a complete raw DEX method ID. Overload indices
-  are tied to this artifact and engine, not stable identities across builds.
+  `dex_descriptor`, for example `(I)V`. Display names can be JADX aliases, so
+  match native exports against `dex_class_name`/`dex_method_name` and the
+  descriptor rather than the display name; the descriptor alone is not a
+  complete raw DEX method ID. Overload indices are tied to this
+  artifact and engine, not stable identities across builds.
 - A `mapping` block appears only when the caller selected `mapping_path`. Its
   names are claims from that file, not observations of the APK. REA does not
   check that the mapping belongs to this build; `pg_map_id` is reported, not
