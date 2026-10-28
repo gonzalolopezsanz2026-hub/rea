@@ -198,6 +198,36 @@ export interface ElectronNativeAddonBindingFinding {
   readonly location: JavaScriptSourceRange;
 }
 
+/**
+ * One custom URL scheme registration visible at an Electron `app` or
+ * `protocol` call site. Registration shows a reachable entry point, not
+ * that the operating system or a session currently routes the scheme here.
+ */
+export interface ElectronProtocolFinding {
+  /** The exact Electron member called. */
+  readonly api: string;
+  /**
+   * `os-default-client`: `app.setAsDefaultProtocolClient`, which asks the OS to
+   * open the scheme's links in this app; `privileged-scheme`: an entry passed to
+   * `protocol.registerSchemesAsPrivileged`; `handler` and `interceptor`:
+   * `protocol.handle`/`register*Protocol` and `intercept*Protocol`.
+   */
+  readonly role:
+    | "os-default-client"
+    | "privileged-scheme"
+    | "handler"
+    | "interceptor";
+  readonly scheme: ElectronStaticValue;
+  /** `session.defaultSession.protocol` rather than the default `protocol` module. */
+  readonly session: "default-protocol" | "default-session";
+  /** Privilege keys with a literal `true`; null unless `role` is `privileged-scheme` with a literal object. */
+  readonly enabled_privileges: readonly string[] | null;
+  readonly module_key: string | null;
+  /** Recovered factory runtime; absent in older or unbundled findings. */
+  readonly module_runtime?: string;
+  readonly location: JavaScriptSourceRange;
+}
+
 /** All Electron-specific facts collected during one shared AST traversal. */
 export interface ElectronStaticFindings {
   /** Calls that may replace the application path used by Electron loadFile. */
@@ -208,6 +238,7 @@ export interface ElectronStaticFindings {
   readonly sender_validations: readonly ElectronSenderValidationFinding[];
   readonly utility_processes: readonly ElectronUtilityProcessFinding[];
   readonly native_addon_bindings: readonly ElectronNativeAddonBindingFinding[];
+  readonly protocols: readonly ElectronProtocolFinding[];
   /** Source-bound candidate paths through bundled exports and IPC closures. */
   readonly call_paths?: readonly ElectronCallPath[];
 }
