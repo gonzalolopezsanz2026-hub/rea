@@ -17,6 +17,7 @@ import type {
   JavaScriptSemanticIr,
 } from "../../domain/javascript/javascriptSemanticIr.js";
 import { sourceRangesEqual as rangesEqual } from "../../domain/javascript/javascriptStaticAnalysisHelpers.js";
+import { javascriptSourceRangeKey } from "../../domain/javascript/javascriptSourceCoordinates.js";
 import type { JavaScriptApplicationGraph } from "../../domain/javascript/javascriptApplicationGraph.js";
 import type { JavaScriptArtifactFile } from "../../domain/javascript/javascriptArtifactFiles.js";
 import {
@@ -31,6 +32,7 @@ import {
 } from "./JavaScriptSemanticGraphDataProjection.js";
 import { projectSemanticResources } from "./JavaScriptSemanticGraphResourceProjection.js";
 import { projectSemanticAssignments } from "./JavaScriptSemanticGraphAssignmentProjection.js";
+import { projectSemanticExpressionInfluence } from "./JavaScriptSemanticGraphExpressionProjection.js";
 import { projectSemanticObjects } from "./JavaScriptSemanticGraphObjectProjection.js";
 import { projectSemanticValues } from "./JavaScriptSemanticGraphValueProjection.js";
 import {
@@ -935,6 +937,11 @@ function* projectDefinitionsAndReferences(
 }
 
 const projectCalls = (context: FileContext): void => {
+  const expressions = new Set(
+    context.ir.expressionFlows.map((flow) =>
+      javascriptSourceRangeKey(flow.location),
+    ),
+  );
   for (const call of context.ir.callSites) {
     const callNode = context.callSiteNodes.get(call.callSiteId);
     if (callNode === undefined) continue;
@@ -959,7 +966,40 @@ const projectCalls = (context: FileContext): void => {
           `${call.callSiteId}\u0000${String(argument.index)}`,
           argumentNode,
         );
-      const references = context.referenceNodesWithin(argument.location);
+      if (!argument.spread && Object.hasOwn(argument, "literal"))
+        addRelation(context.state, {
+          source: argumentNode,
+          target: callNode,
+          relation: "influences",
+          resolution: "resolved",
+        });
+      if (
+        call.resolution !== "exact" &&
+        call.resultUsed &&
+        argumentNode !== null
+      )
+        addSemanticGraphUnknown(context.state, {
+          node_id: argumentNode.node_id,
+          family: "data-flow",
+          relation_kinds: ["influences"],
+          reason: "dynamic-call",
+          detail:
+            "The dynamic call's return dependency on this argument is unknown.",
+          candidate_node_ids: [],
+          evidence: unknownSemanticEvidence(context.file, argument.location),
+        });
+      const references =
+        argument.valueExpressionLocation !== null &&
+        expressions.has(
+          javascriptSourceRangeKey(argument.valueExpressionLocation),
+        )
+          ? []
+          : context
+              .referenceNodesWithin(argument.location)
+              .filter(
+                (reference) =>
+                  reference.function_node_id === callNode.function_node_id,
+              );
       for (const reference of references)
         addRelation(context.state, {
           source: reference,
@@ -1025,6 +1065,14 @@ const createArgumentNode = (
       ? "spread argument"
       : `argument ${String(argument.index)}`,
     functionNodeId: callNode.function_node_id,
+    ...(!argument.spread && Object.hasOwn(argument, "literal")
+      ? {
+          properties: {
+            literal_argument_value: argument.literal ?? null,
+            literal_argument_call_site_node_id: callNode.node_id,
+          },
+        }
+      : {}),
   });
 
 /** Per-file projection passes, run in this order with a yield between each. */
@@ -1035,6 +1083,7 @@ const FILE_PROJECTION_PASSES: readonly ((
   projectSemanticObjects,
   projectSemanticAssignments,
   projectCalls,
+  projectSemanticExpressionInfluence,
   projectSemanticPromises,
   projectSemanticEvents,
   projectSemanticTimers,

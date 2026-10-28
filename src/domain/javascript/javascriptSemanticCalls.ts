@@ -146,6 +146,7 @@ const collectCallSite = (
     callerCallableId: owner?.callableId ?? null,
     location: range(node),
     calleeLocation: range(node.callee),
+    resultUsed: !t.isExpressionStatement(parent),
     resolution:
       resolution.callableIds.length === 1 && resolution.complete
         ? "exact"

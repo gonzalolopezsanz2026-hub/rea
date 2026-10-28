@@ -47,12 +47,7 @@ export interface JavaScriptSemanticScope {
   readonly scopeId: string;
   readonly parentScopeId: string | null;
   readonly kind:
-    | "program"
-    | "function"
-    | "block"
-    | "static-block"
-    | "class"
-    | "catch";
+    "program" | "function" | "block" | "static-block" | "class" | "catch";
   readonly location: JavaScriptSourceRange;
   readonly bindingsComplete: boolean;
   readonly bindingIds: readonly string[];
@@ -126,6 +121,8 @@ export interface JavaScriptSemanticCallSite {
   readonly callerCallableId: string | null;
   readonly location: JavaScriptSourceRange;
   readonly calleeLocation: JavaScriptSourceRange;
+  /** The call's value appears in an enclosing expression or return. */
+  readonly resultUsed: boolean;
   readonly resolution: "exact" | "ambiguous" | "unresolved";
   readonly calleeCallableIds: readonly string[];
   readonly arguments: readonly JavaScriptSemanticCallArgument[];
@@ -180,11 +177,7 @@ export interface JavaScriptSemanticClosureCapture {
 export interface JavaScriptSemanticPromiseOperation {
   readonly promiseId: string;
   readonly kind:
-    | "constructor"
-    | "static"
-    | "chain"
-    | "aggregate"
-    | "awaited-expression";
+    "constructor" | "static" | "chain" | "aggregate" | "awaited-expression";
   readonly method:
     | "new"
     | "resolve"
@@ -327,13 +320,7 @@ export interface JavaScriptSemanticRequestOperation {
   readonly requestId: string;
   readonly kind: "request" | "response-consumer";
   readonly method:
-    | "fetch"
-    | "WebSocket"
-    | "request"
-    | "get"
-    | "json"
-    | "text"
-    | "arrayBuffer";
+    "fetch" | "WebSocket" | "request" | "get" | "json" | "text" | "arrayBuffer";
   readonly location: JavaScriptSourceRange;
   readonly ownerCallableId: string | null;
   readonly resultBindingId: string | null;
@@ -439,6 +426,25 @@ export interface JavaScriptSemanticAssignmentFlow {
   readonly ownerCallableId: string | null;
 }
 
+/** Syntactic inputs to one operator result; this is influence, not identity. */
+export interface JavaScriptSemanticExpressionFlow {
+  readonly location: JavaScriptSourceRange;
+  readonly operator: string;
+  readonly operands: readonly {
+    readonly location: JavaScriptSourceRange;
+    readonly kind: "reference" | "expression" | "literal" | "unsupported";
+    readonly conditional: boolean;
+    readonly literal?: string | number | boolean | null;
+  }[];
+  readonly ownerCallableId: string | null;
+}
+
+/** A direct identifier declaration initialized by an operator expression. */
+export interface JavaScriptSemanticInitializerFlow {
+  readonly target: JavaScriptSourceRange;
+  readonly source: JavaScriptSourceRange;
+}
+
 /** Provider-neutral JavaScript semantic IR. */
 export interface JavaScriptSemanticIr {
   readonly schema: "JavaScriptSemanticIR";
@@ -462,6 +468,13 @@ export interface JavaScriptSemanticIr {
   readonly boundaryOperations: readonly JavaScriptSemanticBoundaryOperation[];
   readonly resourceOperations: readonly JavaScriptSemanticResourceOperation[];
   readonly assignmentFlows: readonly JavaScriptSemanticAssignmentFlow[];
+  readonly expressionFlows: readonly JavaScriptSemanticExpressionFlow[];
+  readonly initializerFlows: readonly JavaScriptSemanticInitializerFlow[];
+  readonly literalReturns: readonly {
+    readonly location: JavaScriptSourceRange;
+    readonly value: string | number | boolean | null;
+  }[];
+  readonly expressionFlowsTruncated: boolean;
   readonly objectOperations: readonly JavaScriptSemanticObjectOperation[];
   readonly functionFingerprints: readonly JavaScriptSemanticFunctionFingerprint[];
   readonly frontiers: readonly JavaScriptSemanticFrontier[];
@@ -492,6 +505,10 @@ export const failedJavaScriptSemanticIr = (): JavaScriptSemanticIr => ({
   boundaryOperations: [],
   resourceOperations: [],
   assignmentFlows: [],
+  expressionFlows: [],
+  initializerFlows: [],
+  literalReturns: [],
+  expressionFlowsTruncated: false,
   objectOperations: [],
   functionFingerprints: [],
   frontiers: [],
