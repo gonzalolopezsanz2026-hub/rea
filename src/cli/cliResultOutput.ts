@@ -276,7 +276,12 @@ export const createCliResultOutput = (
       streaming = true;
     },
     captureSdkOutput(text) {
-      if (format !== "jsonl" || streaming || handled) return false;
+      // JSONL always buffers for framing. Piped/redirected JSON also buffers so
+      // Incur's always-indented Formatter output can be rewritten compactly.
+      // Terminal JSON stays with Incur, which already matches the indent contract.
+      const captureJson = format === "json" && !isTerminalOutput(destination);
+      if ((format !== "jsonl" && !captureJson) || streaming || handled)
+        return false;
       // Incur already materializes one-shot documents. Retain references only;
       // generator events bypass this buffer and remain incremental.
       if (text.length > 0) sdkParts.push(text);
@@ -291,6 +296,19 @@ export const createCliResultOutput = (
             // A write callback runs after earlier queued writes have completed,
             // so the launcher's explicit exit cannot discard a pending pipe tail.
             await writeOutputText(destination, "");
+            return;
+          }
+          if (format === "json") {
+            const text = parts.join("");
+            let result: unknown;
+            try {
+              result = JSON.parse(text);
+            } catch {
+              // Preserve non-JSON SDK diagnostics verbatim.
+              await writeOutputText(destination, text);
+              return;
+            }
+            await writeJsonOutput(result, destination, "json");
             return;
           }
           if (exitCode === 0) {
