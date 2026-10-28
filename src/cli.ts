@@ -7,6 +7,7 @@ import { registerApkSignatureCommands } from "./cli/apkSignatureCommands.js";
 import { snapshotEnvironment } from "./process/snapshotEnvironment.js";
 import { createDirectAnalysis } from "./composition/directAnalysis.js";
 import { registerEvmCommands } from "./cli/evmCommands.js";
+import { registerSolanaCommands } from "./cli/solanaCommands.js";
 import { registerDesktopApplicationCommands } from "./cli/desktopApplicationCommands.js";
 import { registerGoCommands } from "./cli/goCommands.js";
 import { registerModelCommands } from "./cli/modelCommands.js";
@@ -158,6 +159,7 @@ export const createCli = (
   registerCaptureCommands(cli, logger, environment);
   registerSignalCommands(cli, logger, environment);
   registerEvmCommands(cli, logger, environment);
+  registerSolanaCommands(cli, logger, environment);
   registerDesktopApplicationCommands(cli, logger);
   registerGoCommands(cli, logger);
   registerIl2cppCommands(cli, logger);

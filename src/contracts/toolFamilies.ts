@@ -4,6 +4,7 @@ import { CAPTURE_TOOL_CONTRACTS } from "./captures/captureToolContracts.js";
 import { SIGNAL_TOOL_CONTRACTS } from "./signals/signalToolContracts.js";
 import { WASM_TOOL_CONTRACTS } from "./wasm/wasmToolContracts.js";
 import { EVM_TOOL_CONTRACTS } from "./evm/evmToolContracts.js";
+import { SOLANA_TOOL_CONTRACTS } from "./solana/solanaToolContracts.js";
 import { GO_TOOL_CONTRACTS } from "./go/goToolContracts.js";
 import { GPU_TOOL_CONTRACTS } from "./gpu/gpuToolContracts.js";
 import { RUST_TOOL_CONTRACTS } from "./rust/rustToolContracts.js";
@@ -84,6 +85,7 @@ export const TOOL_FAMILY_DEFINITIONS = [
       ...ARTIFACT_TOOL_CONTRACTS,
       ...DESKTOP_APPLICATION_TOOL_CONTRACTS,
       ...EVM_TOOL_CONTRACTS,
+      ...SOLANA_TOOL_CONTRACTS,
       ...GO_TOOL_CONTRACTS,
       ...GPU_TOOL_CONTRACTS,
       ...IL2CPP_TOOL_CONTRACTS,
