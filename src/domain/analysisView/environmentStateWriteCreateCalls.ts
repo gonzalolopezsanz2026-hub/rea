@@ -339,6 +339,31 @@ const shownAlone = (
   return sent ? undefined : { rule: own };
 };
 
+/** A member one call sent and stored as sent, and another left out and the application numbered: the value a call sends, else the next number. */
+const sentOrNumbered = (
+  before: FieldRule,
+  after: FieldRule,
+  field: string,
+  calls: FieldCalls,
+  agree: (held: FieldRule) => FieldRule | undefined,
+): FieldRule | undefined => {
+  const laterSent = Object.hasOwn(calls.later.body, field);
+  if (before.rule === "echo")
+    return after.rule === "sequence" && !laterSent
+      ? { ...after, sent: true }
+      : undefined;
+  if (before.rule !== "sequence") return undefined;
+  if (after.rule === "echo")
+    return before.sent === true || !calls.sentBefore.has(field)
+      ? { ...before, sent: true }
+      : undefined;
+  if (before.sent !== true || after.rule !== "sequence" || laterSent)
+    return undefined;
+  const { sent: _sent, ...numbered } = before;
+  const merged = agree(numbered);
+  return merged?.rule === "sequence" ? { ...merged, sent: true } : undefined;
+};
+
 /** One field's rule in the merged plan, and the default it gives a member; undefined when the calls disagree on it. */
 const mergedField = (
   field: string,
@@ -351,13 +376,18 @@ const mergedField = (
   if (!inExemplar || !Object.hasOwn(later.entity, field))
     return shownAlone(inExemplar, calls);
   if (before !== undefined && after !== undefined) {
-    const rule = agreeing(before, after, {
+    const values = {
       field,
       later: later.entity[field],
       earlier: calls.earlier,
       exemplar,
       laterEntity: later.entity,
-    });
+    };
+    const rule =
+      agreeing(before, after, values) ??
+      sentOrNumbered(before, after, field, calls, (held) =>
+        agreeing(held, after, values),
+      );
     return rule === undefined ? undefined : { rule };
   }
   // The plan echoes a member this call left out: what it stored there is the member's default.

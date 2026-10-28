@@ -229,8 +229,11 @@ const ruledValue = (
   switch (rule.rule) {
     case "reference":
       return referencedValue(rule, body, referenced);
-    case "identity":
     case "sequence":
+      return rule.sent === true && Object.hasOwn(body, rule.field)
+        ? ok(body[rule.field]!)
+        : generate(rule);
+    case "identity":
     case "unique":
     case "renewed":
     case "clock":
@@ -489,6 +492,9 @@ export const updatedFields = (
         setOwnMember(written, rule.field, value.value);
     }
   }
+  // A member the call leaves out takes the default a whole-object update showed.
+  for (const { member, value } of plan.body.defaults ?? [])
+    if (!Object.hasOwn(sent, member)) setOwnMember(written, member, value);
   const unspelled = derive(
     plan.rules.filter(
       (rule) => rule.rule !== "slug" || Object.hasOwn(sent, rule.from),
