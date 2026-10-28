@@ -22,11 +22,15 @@ export interface ClientConfigurationSource extends ClientConfigurationDocument {
 const invalidEnvironment = (
   path: string,
   error: ConfigurationError,
-): ClientConfigurationFileError => ({
-  kind: "malformed",
-  path,
-  detail: `Configuration ${path} has an invalid REA server environment: ${error.settings.map(({ setting, constraint }) => `${setting}: ${constraint}`).join("; ")}. Repair it before rerunning setup.`,
-});
+): ClientConfigurationFileError => {
+  // Some constraints are complete sentences; terminate only those that are not.
+  const reason = `Configuration ${path} has an invalid REA server environment: ${error.settings.map(({ setting, constraint }) => `${setting}: ${constraint}`).join("; ")}`;
+  return {
+    kind: "malformed",
+    path,
+    detail: `${/[.!?]$/u.test(reason) ? reason : `${reason}.`} Repair it before rerunning setup.`,
+  };
+};
 
 /** A named source failure that setup can explain without losing the bad path. */
 export interface ClientConfigurationFileError {

@@ -6,6 +6,7 @@ import { systemSetupHost } from "../../../src/application/SetupHost.js";
 import { runSetup } from "../../../src/application/Setup.js";
 import { options } from "../../../src/application/Setup.fixture.js";
 import { supportedClients } from "../../../src/application/SupportedClients.js";
+import { toolFamiliesConstraint } from "../../../src/config/mcpToolFamilies.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
 
 it.each([
@@ -44,7 +45,9 @@ it.each([
     if (toolFamilies === undefined && environmentFamilies !== "artifact") {
       expect(first.status).toBe("needs_human");
       expect(first.appliedActions).toEqual([]);
-      expect(first.remediation).toContain("REA_MCP_TOOL_FAMILIES");
+      expect(first.remediation).toContain(
+        `REA_MCP_TOOL_FAMILIES: ${toolFamiliesConstraint} Repair it before rerunning setup.`,
+      );
       await expect(
         access(`${client.configPath}.rea.backup`),
       ).rejects.toMatchObject({
