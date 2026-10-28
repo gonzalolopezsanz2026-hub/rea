@@ -245,6 +245,16 @@ const evaluateObligation = (
     unavailable_authority: candidate.unavailable_authority,
     required_next_evidence: candidate.required_next_evidence,
     binding,
+    ...(binding?.verifier === null || binding === null
+      ? {}
+      : {
+          verifier_control_status: evaluateVerifierControlStatus(
+            candidate,
+            binding,
+            binding.verifier,
+            context,
+          ),
+        }),
     status: obligationStatus(candidate, binding, diagnostics),
     diagnostics: uniqueDiagnostics(diagnostics),
   };
@@ -404,6 +414,123 @@ const evaluateVerifier = (
       verifier.status === "fail" ? "verifier-failed" : "verifier-unavailable",
       `Latest verifier status is ${verifier.status}.`,
     );
+  evaluateVerifierControls(candidate, binding, verifier, context, diagnostics);
+};
+
+const evaluateVerifierControls = (
+  candidate: ReconstructionObligationCandidate,
+  binding: Binding,
+  verifier: NonNullable<Binding["verifier"]>,
+  context: EvaluationContext,
+  diagnostics: Diagnostic[],
+): void => {
+  if (verifier.controls === undefined || verifier.controls.length === 0) {
+    addDiagnostic(
+      diagnostics,
+      "missing-verifier-control",
+      "Verifier binding does not include a failing negative control.",
+    );
+    return;
+  }
+  for (const control of verifier.controls) {
+    if (control.status === "pass") {
+      addDiagnostic(
+        diagnostics,
+        "vacuous-verifier",
+        `Verifier negative control ${control.control_id} (${control.defect}) unexpectedly passed; a vacuous verifier cannot close this obligation.`,
+      );
+    } else if (control.status !== "fail") {
+      addDiagnostic(
+        diagnostics,
+        "verifier-control-unavailable",
+        `Verifier negative control ${control.control_id} status is ${control.status}; expected fail.`,
+      );
+    }
+    const controlEvidence = context.evidence.get(control.result_evidence_id);
+    if (controlEvidence === undefined) {
+      addDiagnostic(
+        diagnostics,
+        "missing-verifier-control-result",
+        `Verifier negative control ${control.control_id} result Evidence is absent from the bundle.`,
+      );
+      continue;
+    }
+    const controlOwnerSha256 =
+      control.candidate_sha256 ??
+      (control.candidate_id === undefined
+        ? binding.owner.owner_sha256
+        : undefined);
+    if (controlOwnerSha256 === undefined) {
+      addDiagnostic(
+        diagnostics,
+        "inapplicable-verifier-control-proof",
+        `Verifier negative control ${control.control_id} proof qualification: owner-mismatch.`,
+      );
+      continue;
+    }
+    const controlProof = context.proofs.get(control.result_evidence_id);
+    if (controlProof === undefined) continue;
+    const qualification = qualifyReconstructionProof(
+      controlProof,
+      verifier.authority,
+      {
+        kind: "verifier",
+        obligationId: candidate.obligation_id,
+        obligationVersion: candidate.obligation_version,
+        ownerSha256: controlOwnerSha256,
+        verifierId: verifier.verifier_id,
+        claimId: verifier.claim_id,
+        expectedPassed: false,
+      },
+    );
+    if (!qualification.ok) {
+      if (qualification.error === "passed-negative-control") {
+        if (control.status !== "pass")
+          addDiagnostic(
+            diagnostics,
+            "vacuous-verifier",
+            `Verifier negative control ${control.control_id} (${control.defect}) proof reported passed: true; a vacuous verifier cannot close this obligation.`,
+          );
+      } else {
+        addDiagnostic(
+          diagnostics,
+          qualification.error === "insufficient-authority"
+            ? "weak-verifier-authority"
+            : "inapplicable-verifier-control-proof",
+          `Verifier negative control ${control.control_id} proof qualification: ${qualification.error}.`,
+        );
+      }
+    }
+  }
+};
+
+const evaluateVerifierControlStatus = (
+  candidate: ReconstructionObligationCandidate,
+  binding: Binding,
+  verifier: NonNullable<Binding["verifier"]>,
+  context: EvaluationContext,
+): NonNullable<ReconstructionObligation["verifier_control_status"]> => {
+  const controlDiagnostics: Diagnostic[] = [];
+  evaluateVerifierControls(
+    candidate,
+    binding,
+    verifier,
+    context,
+    controlDiagnostics,
+  );
+  if (verifier.controls === undefined || verifier.controls.length === 0)
+    return "unchallenged";
+  if (hasDiagnostic(controlDiagnostics, "vacuous-verifier")) return "vacuous";
+  if (hasDiagnostic(controlDiagnostics, "missing-verifier-control-result"))
+    return "missing-control-result";
+  if (
+    hasDiagnostic(controlDiagnostics, "inapplicable-verifier-control-proof") ||
+    hasDiagnostic(controlDiagnostics, "weak-verifier-authority")
+  )
+    return "inapplicable-control-proof";
+  if (hasDiagnostic(controlDiagnostics, "verifier-control-unavailable"))
+    return "control-unavailable";
+  return "challenged";
 };
 
 const evaluateAuthority = (

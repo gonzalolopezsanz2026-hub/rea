@@ -63,7 +63,11 @@ const applicabilitySpecifications = [
   },
   {
     name: "changed obligation revision",
-    codes: ["inapplicable-fixture-proof", "inapplicable-verifier-proof"],
+    codes: [
+      "inapplicable-fixture-proof",
+      "inapplicable-verifier-control-proof",
+      "inapplicable-verifier-proof",
+    ],
     status: "open",
     reason: "revision-mismatch",
   },
