@@ -305,6 +305,26 @@ describe("Mach-O metadata span mapping", () => {
   });
 });
 
+it("walks a command table by its declared extent rather than a count ceiling", () => {
+  const table = (count: number, commandBytes = count * 16): Buffer => {
+    const bytes = Buffer.alloc(32 + count * 16);
+    bytes.writeUInt32LE(0xfeedfacf, 0);
+    bytes.writeUInt32LE(CPU.arm64.type, 4);
+    bytes.writeUInt32LE(2, 12);
+    bytes.writeUInt32LE(count, 16);
+    bytes.writeUInt32LE(commandBytes, 20);
+    for (let index = 0; index < count; index++) {
+      bytes.writeUInt32LE(0x2a, 32 + index * 16);
+      bytes.writeUInt32LE(16, 36 + index * 16);
+    }
+    return bytes;
+  };
+  expect(parseMachoLayout(table(4097), "arm64").segments).toEqual([]);
+  expect(() => parseMachoLayout(table(4097, 4096 * 16), "arm64")).toThrow(
+    /load command 4096 starts beyond sizeofcmds/u,
+  );
+});
+
 describe("native Mach-O slice selection", () => {
   it("rejects misaligned load commands", () => {
     expect(() =>

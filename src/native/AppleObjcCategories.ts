@@ -1,5 +1,6 @@
 import type { ObjcSwiftMetadata } from "../domain/native/objcSwiftMetadata.js";
 import type { Section } from "./AppleMachoSelection.js";
+import { BinaryFormatFailure } from "./metadata/BinaryContainer.js";
 import type { ObjcDispatchReaders } from "./AppleObjcDispatchFacets.js";
 import { readObjcPropertiesOf } from "./AppleObjcProperties.js";
 import { issue, type DecodeIssue } from "./AppleDispatchDecodeFacts.js";
@@ -43,7 +44,10 @@ export const decodeObjcCategories = (input: {
     ({ name }) => name === "__objc_catlist",
   )) {
     if (section.size % 8 !== 0)
-      throw new RangeError("Misaligned Objective-C category list");
+      throw new BinaryFormatFailure(
+        "malformed",
+        "Misaligned Objective-C category list",
+      );
     for (let index = 0; index < section.size / 8; index++) {
       if (!input.admit()) break;
       examined++;

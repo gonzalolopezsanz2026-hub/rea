@@ -141,6 +141,9 @@ export const selectMachoSlice = (
   return selected;
 };
 
+/** A rejected layout declaration in the selected Mach-O image. */
+export class MalformedMachoLayoutError extends RangeError {}
+
 /** A recognized Mach-O class outside this metadata reader's supported formats. */
 export class UnsupportedMachoMetadataFormatError extends Error {
   constructor(message: string) {
@@ -154,19 +157,22 @@ export const parseMachoLayout = (
   bytes: Buffer,
   architecture: string,
 ): MachoLayout => {
-  if (bytes.length < 4) throw new RangeError("Truncated Mach-O header");
+  if (bytes.length < 4)
+    throw new MalformedMachoLayoutError("Truncated Mach-O header");
   const selection = selectMachoSlice(bytes, architecture);
   const { slice, sliceEnd } = selection;
-  if (slice + 4 > sliceEnd) throw new RangeError("Truncated Mach-O header");
+  if (slice + 4 > sliceEnd)
+    throw new MalformedMachoLayoutError("Truncated Mach-O header");
   const selectedBytes = bytes.subarray(slice, sliceEnd);
   const declarations = readMachoLoadCommandDeclarations(
     selectedBytes,
     selectedBytes.length,
   );
-  if (!declarations.ok) throw new RangeError("Truncated Mach-O header");
+  if (!declarations.ok)
+    throw new MalformedMachoLayoutError("Truncated Mach-O header");
   if (declarations.value === null) {
     if (selectedBytes.length < 32)
-      throw new RangeError("Truncated Mach-O header");
+      throw new MalformedMachoLayoutError("Truncated Mach-O header");
     throw new TypeError(
       "Only little-endian 64-bit Mach-O metadata is supported",
     );
@@ -183,7 +189,10 @@ export const parseMachoLayout = (
   }
   if (table.wide && !table.littleEndian) {
     if (cpuType !== 0x01000012)
-      throw new TypeError("Unsupported big-endian Mach-O CPU type");
+      throw new BinaryFormatFailure(
+        "unsupported",
+        "Unsupported big-endian Mach-O CPU type",
+      );
     throw new UnsupportedMachoMetadataFormatError(
       "Unsupported big-endian 64-bit PowerPC Mach-O metadata",
     );
@@ -198,10 +207,9 @@ export const parseMachoLayout = (
     throw new UnsupportedMachoMetadataFormatError(
       `Unsupported 32-bit Mach-O metadata for requested CPU type ${architecture}`,
     );
-  const commands = table.commandCount;
   const commandEnd = slice + table.headerSize + table.commandBytes;
-  if (commands > 4096 || commandEnd > sliceEnd)
-    throw new RangeError("Malformed Mach-O command bounds");
+  if (commandEnd > sliceEnd)
+    throw new MalformedMachoLayoutError("Malformed Mach-O command bounds");
   const state: LayoutState = {
     slice,
     sliceEnd,
@@ -219,7 +227,7 @@ export const parseMachoLayout = (
   while (framing.nextOffset !== null) {
     const cursor = slice + table.headerSize + framing.nextOffset;
     const frame = framing.read(bytes.subarray(cursor, cursor + 8));
-    if (!frame.ok) throw new RangeError(frame.error);
+    if (!frame.ok) throw new MalformedMachoLayoutError(frame.error);
     const command = {
       cursor,
       kind: frame.value.command,
@@ -229,7 +237,7 @@ export const parseMachoLayout = (
     else collectFixupCommand(bytes, command, state);
   }
   const complete = framing.finish();
-  if (!complete.ok) throw new RangeError(complete.error);
+  if (!complete.ok) throw new MalformedMachoLayoutError(complete.error);
   const { segments, sections, chained, binds, rebases, dylibs } = state;
   const mappings = createFileMappingIndex(state.mappings, state.zeroFills);
   const offset = (address: bigint, size = 1): number => {
@@ -301,7 +309,8 @@ const collectSegment = (
     true,
     true,
   );
-  if (!parsed.ok) throw new RangeError("Truncated segment command");
+  if (!parsed.ok)
+    throw new MalformedMachoLayoutError("Truncated segment command");
   const {
     address,
     memorySize,
@@ -313,9 +322,11 @@ const collectSegment = (
     headerSize,
   } = parsed.value;
   const admitted = admitMachoSegmentMapping(parsed.value, 64);
-  if (!admitted.ok) throw new RangeError(admitted.error.message);
+  if (!admitted.ok) throw new MalformedMachoLayoutError(admitted.error.message);
   if (fileOffset + fileSize > BigInt(state.sliceEnd - state.slice))
-    throw new RangeError("Segment file range exceeds target bytes");
+    throw new MalformedMachoLayoutError(
+      "Segment file range exceeds target bytes",
+    );
   const name = decodeMachoFixedName(nameBytes);
   state.segments.push({
     address,
@@ -342,7 +353,7 @@ const collectSegment = (
   )
     state.baseAddress ??= address;
   if (headerSize + count * 80 > size)
-    throw new RangeError("Truncated section table");
+    throw new MalformedMachoLayoutError("Truncated section table");
   for (let section = 0; section < count; section++) {
     const position = cursor + headerSize + section * 80;
     const parsedSection = readMachoSectionHeader(
@@ -350,10 +361,13 @@ const collectSegment = (
       true,
       true,
     );
-    if (!parsedSection.ok) throw new RangeError("Truncated section table");
+    if (!parsedSection.ok)
+      throw new MalformedMachoLayoutError("Truncated section table");
     const { nameBytes, address, size: sectionSize } = parsedSection.value;
     if (sectionSize > BigInt(Number.MAX_SAFE_INTEGER))
-      throw new RangeError("Section size exceeds exact numeric range");
+      throw new MalformedMachoLayoutError(
+        "Section size exceeds exact numeric range",
+      );
     state.sections.push({
       name: decodeMachoFixedName(nameBytes),
       address,
@@ -376,14 +390,18 @@ const collectFixupCommand = (
     const offset = state.slice + bytes.readUInt32LE(at);
     const length = bytes.readUInt32LE(at + 4);
     if (offset + length > state.sliceEnd)
-      throw new RangeError("Fixup data exceeds the Mach-O slice");
+      throw new MalformedMachoLayoutError(
+        "Fixup data exceeds the Mach-O slice",
+      );
     return { offset, size: length };
   };
   if (kind === LC_DYLD_CHAINED_FIXUPS) {
-    if (size < 16) throw new RangeError("Truncated chained-fixups command");
+    if (size < 16)
+      throw new MalformedMachoLayoutError("Truncated chained-fixups command");
     state.chained = range(cursor + 8);
   } else if (kind === LC_DYLD_INFO || kind === LC_DYLD_INFO_ONLY) {
-    if (size < 48) throw new RangeError("Truncated dyld-info command");
+    if (size < 48)
+      throw new MalformedMachoLayoutError("Truncated dyld-info command");
     const rebase = range(cursor + 8);
     if (rebase.size > 0) state.rebases.push(rebase);
     for (const [at, stream] of [
@@ -401,10 +419,12 @@ const collectFixupCommand = (
     );
     if (!parsed.ok) {
       if (parsed.error._tag === "InvalidMachoDylibCommand")
-        throw new RangeError("Truncated dylib command");
+        throw new MalformedMachoLayoutError("Truncated dylib command");
       if (parsed.error.reason === "unterminated")
-        throw new RangeError("Unterminated dylib install name");
-      throw new RangeError("Dylib install name is outside its load command");
+        throw new MalformedMachoLayoutError("Unterminated dylib install name");
+      throw new MalformedMachoLayoutError(
+        "Dylib install name is outside its load command",
+      );
     }
     const { nameBytes } = parsed.value;
     state.dylibs.push(

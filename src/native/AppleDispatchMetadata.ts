@@ -18,6 +18,7 @@ import {
   AnalysisAccessDeniedError,
   AnalysisCapabilityUnavailableError,
   AnalysisResourceConstraintError,
+  AnalysisUnsupportedTargetError,
 } from "../domain/analysisErrorCore.js";
 import {
   ArtifactFileCleanupFailure,
@@ -42,6 +43,7 @@ import { EvidenceIntegrityError } from "../domain/evidenceErrors.js";
 import { pushDispatchCoverage } from "./AppleDispatchCoverage.js";
 import { parsePointerFixups } from "./AppleMachoFixups.js";
 import {
+  MalformedMachoLayoutError,
   parseMachoLayout,
   UnsupportedMachoMetadataFormatError,
 } from "./AppleMachoSelection.js";
@@ -58,6 +60,7 @@ import {
   createSwiftContextReader,
 } from "./AppleSwiftNominalTypes.js";
 import { inspectObjcClassImportBindings } from "./AppleObjcClassImportBindings.js";
+import { BinaryFormatFailure } from "./metadata/BinaryContainer.js";
 
 /** Decode validated little-endian 64-bit Apple Objective-C metadata without loading target code. */
 export const decodeAppleDispatchMetadata = (
@@ -230,7 +233,10 @@ export const decodeAppleDispatchMetadata = (
     ({ name }) => name === "__swift5_types",
   )) {
     if (section.size % 4 !== 0)
-      throw new RangeError("Misaligned Swift type section");
+      throw new BinaryFormatFailure(
+        "malformed",
+        "Misaligned Swift type section",
+      );
     for (let index = 0; index < section.size / 4 && index < maxRecords; index++)
       typeEntries.push(section.address + BigInt(index * 4));
     if (section.size / 4 > maxRecords) budget.truncated = true;
@@ -445,6 +451,18 @@ const appleDispatchMetadataPrimaryFailure = (
 ): AnalysisError => {
   if (origin === "owned-or-classified") {
     if (cause instanceof AnalysisError) return cause;
+    if (
+      cause instanceof BinaryFormatFailure ||
+      cause instanceof MalformedMachoLayoutError
+    )
+      return new AnalysisUnsupportedTargetError(
+        OPERATION,
+        path,
+        cause.message,
+        {
+          cause,
+        },
+      );
     if (cause instanceof UnsupportedMachoMetadataFormatError)
       return new AnalysisCapabilityUnavailableError(
         IDENTITY.id,
