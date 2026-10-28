@@ -28,6 +28,12 @@ import { harmonyApplicationProjectionResultSchema } from "../domain/harmony/harm
 import type { ToolContract } from "./toolContractTypes.js";
 import { toolContractMetadata } from "./toolEffects.js";
 import {
+  readGuidanceSectionInputSchema,
+  readGuidanceSectionOutputSchema,
+  searchGuidanceInputSchema,
+  searchGuidanceOutputSchema,
+} from "./guidanceContracts.js";
+import {
   guidedWorkflowsInputSchema,
   guidedWorkflowsOutputSchema,
 } from "./guidedWorkflowSchemas.js";
@@ -74,6 +80,21 @@ const retained = (evidence_id: string) => ({
 /** Provider-neutral graph workflow contracts shared by MCP and CLI adapters. */
 export const APPLICATION_TOOL_CONTRACTS = [
   {
+    name: "search_guidance",
+    ...toolContractMetadata("search_guidance"),
+    description:
+      "Search only the installed REA managed workflow guidance by analyst question. Returns deterministic ranked sections, bounded pages, and locators for read_guidance_section. No target or provider is accessed.",
+    kind: "application",
+    inputSchema: searchGuidanceInputSchema,
+    outputSchema: searchGuidanceOutputSchema,
+    examples: [
+      {
+        title: "Find exact JavaScript module guidance",
+        input: { query: "exact JavaScript module" },
+      },
+    ],
+  },
+  {
     name: "guided_workflows",
     ...toolContractMetadata("guided_workflows"),
     description:
@@ -95,6 +116,16 @@ export const APPLICATION_TOOL_CONTRACTS = [
         },
       },
     ],
+  },
+  {
+    name: "read_guidance_section",
+    ...toolContractMetadata("read_guidance_section"),
+    description:
+      "Retrieve a section selected by search_guidance from the current installed REA guidance bundle. Reports stale or missing locators explicitly and returns documentation, not target observations or Evidence.",
+    kind: "application",
+    inputSchema: readGuidanceSectionInputSchema,
+    outputSchema: readGuidanceSectionOutputSchema,
+    examples: [],
   },
   {
     name: "trace_application_feature",

@@ -18,6 +18,16 @@ non-string values are rejected with field paths. `action: "list"` accepts no
 workflow identifier or arguments. The MCP adapter respects the same
 `REA_MCP_TOOL_FAMILIES` scope as native prompts, including render requests.
 
+To find a section in the installed guidance bundle by analyst question, use
+`search_guidance` and pass a returned locator to `read_guidance_section`. The
+CLI equivalent is `rea guidance --query "exact JavaScript module"`, followed
+by `rea guidance --action read --locator LOCATOR`. Search is limited to the
+packaged managed skill files, works without providers or a target, and returns
+deterministically paged matches. Results are marked as documentation; locators
+are bound to the installed bundle and report stale or missing guidance without
+returning cached section content. A no-match result says nothing about analysis
+capability availability.
+
 ## Prompt inventory
 
 | Prompt                            | Purpose                                                                              |
