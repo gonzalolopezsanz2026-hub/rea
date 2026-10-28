@@ -99,6 +99,39 @@ const entry = (
   return found;
 };
 
+it("derives closed-session address and explicit-path APK availability from their contracts", () => {
+  expect(entry("inspect_address_context", status())).toMatchObject({
+    available: false,
+    reason: "target_required",
+    remediation: expect.any(String),
+  });
+  expect(entry("inspect_apk_signature", status())).toMatchObject({
+    available: true,
+    reason: "available",
+    remediation: null,
+  });
+  expect(
+    entry(
+      "inspect_address_context",
+      status({
+        open: true,
+        kind: "executable",
+        capabilities: [
+          {
+            operation: "inspect_address_context",
+            available: true,
+            reason: null,
+          },
+        ],
+      }),
+    ),
+  ).toMatchObject({ available: true, reason: "available" });
+  expect(entry("inspect_apk_signature", status({ open: true }))).toMatchObject({
+    available: true,
+    reason: "available",
+  });
+});
+
 describe("ADB and Apktool host availability", () => {
   it("uses only their selected owner probes", () => {
     const ready = {
