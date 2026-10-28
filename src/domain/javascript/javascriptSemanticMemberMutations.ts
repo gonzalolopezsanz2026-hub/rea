@@ -65,7 +65,12 @@ import {
   semanticScopeExitEffect,
 } from "./javascriptSemanticMutationInitializers.js";
 import { semanticCoercionOperands } from "./javascriptSemanticLanguageInvocations.js";
-import { SEMANTIC_ALIAS_SELECTION_LIMIT } from "./javascriptSemanticResourceLimits.js";
+import {
+  SEMANTIC_ALIAS_SELECTION_LIMIT,
+  SEMANTIC_MEMBER_MUTATION_WORKLIST_LIMIT,
+  SEMANTIC_MEMBER_MUTATION_TOTAL_STEPS_LIMIT,
+  SEMANTIC_MEMBER_MUTATION_FIXPOINT_ROUNDS_LIMIT,
+} from "./javascriptSemanticResourceLimits.js";
 import {
   semanticCopiedReferencePath,
   semanticKnownArrayIteration,
@@ -480,6 +485,11 @@ export function* collectSemanticMemberMutationsSteps(
   const observablePaths = observableMutationPaths(state);
   const recordedRequiredEffects = new Set<string>();
   let recordedEffectCount = 0;
+  let totalMutationSteps = 0;
+
+  const markMutationResourceLimit = (): void => {
+    state.valueResourceLimits.add("alias-selections");
+  };
   const recordRequiredEffect = (
     specifier: string,
     path: PropertyPath,
@@ -808,9 +818,50 @@ export function* collectSemanticMemberMutationsSteps(
       capturedSelections: selection?.capturedSelections,
       ...(ownerInitializer === undefined ? {} : { ownerInitializer }),
     });
+    const widenUnvisited = (item: (typeof pending)[number]): void => {
+      let node: t.Node = item.node;
+      let path = item.path;
+      while (t.isMemberExpression(node) || t.isOptionalMemberExpression(node)) {
+        const key = semanticStaticPropertyKey(node.property, node.computed);
+        path = [key, ...path];
+        node = node.object;
+      }
+      const expr = unwrapJavaScriptExpression(node).node;
+      if (t.isIdentifier(expr)) {
+        const binding = resolveBinding(expr, expr.name);
+        if (binding !== undefined) {
+          if (effect === "escape") {
+            binding.escapedPaths.push({
+              path,
+              node: mutation,
+              receiverInitializers: [],
+            });
+          } else {
+            binding.memberWrites.push({
+              receiverIdentity: "possible",
+              path,
+              node: mutation,
+              receiverInitializers: [],
+            });
+          }
+        }
+      }
+    };
     // Visit shallower alias traversals first so their exact prefixes suppress
     // longer loop paths before those paths enumerate every assignment order.
     for (let cursor = 0; cursor < pending.length; cursor++) {
+      if (
+        cursor >= SEMANTIC_MEMBER_MUTATION_WORKLIST_LIMIT ||
+        ++totalMutationSteps > SEMANTIC_MEMBER_MUTATION_TOTAL_STEPS_LIMIT
+      ) {
+        markMutationResourceLimit();
+        for (let i = cursor; i < pending.length; i++) {
+          const item = pending[i];
+          if (item !== undefined) widenUnvisited(item);
+        }
+        clearSemanticValueCaches(state);
+        break;
+      }
       const current = pending[cursor];
       if (current === undefined) break;
       if (
@@ -1653,11 +1704,17 @@ export function* collectSemanticMemberMutationsSteps(
   });
   // A later effect can make a previously defined destructuring source uncertain.
   // Reconsider defaults and iterable origins until their effects are stable.
+  const processedIterableKeys = new WeakMap<IterableReference, string>();
+  let fixpointRounds = 0;
   while (
     pendingReferences.length > 0 ||
     iterableReferences.length > 0 ||
     deferredMapReceivers.size > 0
   ) {
+    if (++fixpointRounds > SEMANTIC_MEMBER_MUTATION_FIXPOINT_ROUNDS_LIMIT) {
+      markMutationResourceLimit();
+      break;
+    }
     const effectsBefore = recordedEffectCount;
     const iterablesBefore = iterableReferences.length;
     const iterationBefore: boolean = state.arrayIterationUnknown;
@@ -1745,11 +1802,16 @@ export function* collectSemanticMemberMutationsSteps(
       // Treat its root as escaped, including writes through yielded references.
       const knownArray = semanticKnownArrayIteration(slot?.value, state);
       if (knownArray && reference.iterationOnly) continue;
+      const effectKind = knownArray ? reference.effect : "escape";
+      const effectPath = knownArray ? reference.path : reference.fallbackPath;
+      const key = `${effectKind}\0${JSON.stringify(effectPath)}\0${knownArray}`;
+      if (processedIterableKeys.get(reference) === key) continue;
+      processedIterableKeys.set(reference, key);
       markValue(
         reference.node,
-        knownArray ? reference.path : reference.fallbackPath,
+        effectPath,
         reference.bindings,
-        knownArray ? reference.effect : "escape",
+        effectKind,
         reference.mutation,
         reference.originAt,
         undefined,
@@ -2008,11 +2070,22 @@ const observableMutationPaths = (
     // Most bindings have no object origin or property projection. Materialize
     // each collection only when it contains a fact or relationship.
     read === undefined ? {} : { read };
+  let settleSteps = 0;
+  let settleBudgetExhausted = false;
+  const chargeSettleBudget = (): boolean => {
+    if (++settleSteps > SEMANTIC_MEMBER_MUTATION_TOTAL_STEPS_LIMIT) {
+      settleBudgetExhausted = true;
+      state.valueResourceLimits.add("alias-selections");
+      return false;
+    }
+    return true;
+  };
   const link = (
     source: MutationObserverNode,
     target: MutationObserverNode,
   ): void => {
     if (target.sources?.has(source) === true) return;
+    if (!chargeSettleBudget()) return;
     (target.sources ??= new Set()).add(source);
     (source.dependents ??= new Set()).add(target);
     schedule(target);
@@ -2038,6 +2111,7 @@ const observableMutationPaths = (
       )}`;
       let selected = observer.projections?.get(identity);
       if (selected === undefined) {
+        if (!chargeSettleBudget()) return observer;
         selected = create({ source: observer, key, numericIndex });
         (observer.projections ??= new Map()).set(identity, selected);
         (observer.dependents ??= new Set()).add(selected);
@@ -2090,7 +2164,16 @@ const observableMutationPaths = (
   }
   const settle = (): void => {
     while (pendingExpressions.length > 0 || pending.length > 0) {
+      if (!chargeSettleBudget()) {
+        pendingExpressions.length = 0;
+        pending.length = 0;
+        break;
+      }
       while (pendingExpressions.length > 0) {
+        if (!chargeSettleBudget()) {
+          pendingExpressions.length = 0;
+          break;
+        }
         const selected = pendingExpressions.pop();
         if (selected === undefined) break;
         const { expression, observer } = selected;
@@ -2173,11 +2256,17 @@ const observableMutationPaths = (
       let changed = false;
       const add = (origin: MutationObservableOrigin): void => {
         if (observer.origins?.has(origin) === true) return;
+        if (!chargeSettleBudget()) return;
         (observer.origins ??= new Set()).add(origin);
         changed = true;
       };
-      for (const source of observer.sources ?? [])
-        for (const origin of source.origins ?? []) add(origin);
+      for (const source of observer.sources ?? []) {
+        if (settleSteps > SEMANTIC_MEMBER_MUTATION_TOTAL_STEPS_LIMIT) break;
+        for (const origin of source.origins ?? []) {
+          if (settleSteps > SEMANTIC_MEMBER_MUTATION_TOTAL_STEPS_LIMIT) break;
+          add(origin);
+        }
+      }
       if (observer.read !== undefined) {
         const { source, key, numericIndex } = observer.read;
         if (key === null || typeof key === "object") {
@@ -2221,6 +2310,8 @@ const observableMutationPaths = (
                 "escape",
                 state,
               )) {
+                if (settleSteps > SEMANTIC_MEMBER_MUTATION_TOTAL_STEPS_LIMIT)
+                  break;
                 link(
                   project(expressionNode(reference.node), reference.path),
                   observer,
@@ -2255,6 +2346,7 @@ const observableMutationPaths = (
     ) {
       observer = project(observer, path);
       settle();
+      if (settleBudgetExhausted) return path;
       const origins = observer.origins;
       return origins === undefined ||
         origins.size === 0 ||
@@ -2262,6 +2354,7 @@ const observableMutationPaths = (
         ? null
         : path;
     }
+    if (settleBudgetExhausted) return path;
     if ((observer.origins?.size ?? 0) === 0)
       return path.length === 0 ? path : [null];
     for (let offset = 0; offset < path.length; offset++) {
@@ -2288,6 +2381,7 @@ const observableMutationPaths = (
     base: PropertyPath,
     segment: PropertyPath,
   ): boolean => {
+    if (settleBudgetExhausted) return true;
     const key = JSON.stringify([bindingId, base, segment]);
     const cached = repeated.get(key);
     if (cached !== undefined) return cached;
@@ -2301,6 +2395,10 @@ const observableMutationPaths = (
     while (observer !== undefined && segment.length > 0) {
       observer = project(observer, segment);
       settle();
+      if (settleBudgetExhausted) {
+        result = true;
+        break;
+      }
       if ((observer.origins?.size ?? 0) === 0) break;
       const signature = JSON.stringify(
         [...(observer.origins ?? [])]
