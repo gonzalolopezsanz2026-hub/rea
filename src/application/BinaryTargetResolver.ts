@@ -78,6 +78,7 @@ import { hasGodotPckHeader } from "../domain/godotPckFormat.js";
 import { hasUImageMagic } from "../domain/uimageFormat.js";
 import { hasUnityFsHeader } from "../domain/unityfsFormat.js";
 import { detectHexRecordEncoding } from "../domain/firmware/hexRecords.js";
+import { hasFitImagesNode } from "../domain/firmware/fitImage.js";
 import {
   hasZipSignature,
   locateTrailingZipArchive,
@@ -672,6 +673,7 @@ const detectArtifactFormat = async (
   if (hasUImageMagic(magic)) return "uimage";
   const hexRecords = detectHexRecordEncoding(magic);
   if (hexRecords !== undefined) return hexRecords;
+  if (hasFitImagesNode(magic)) return "fit";
   // Binary plists, including keyed archives, often use other extensions.
   if (hasBinaryPlistSignature(magic)) return "plist";
   const named = namedArtifactFormat(lower);
@@ -748,6 +750,7 @@ const isArchiveFormat = (
     "pkg",
     "intel-hex",
     "srec",
+    "fit",
   ].includes(format);
 
 /** Whether the leading bytes begin any executable header family, valid or not. */

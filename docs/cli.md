@@ -291,6 +291,16 @@ rea extract-artifact ./firmware.bin --json
 See [U-Boot uImage](uimage.md) for verified CRCs, physical component ranges,
 unknown names, resource limits and retained views. Compressed bytes stay stored.
 
+Inventory and extract U-Boot FIT images:
+
+```sh
+rea inspect-artifact ./boot.itb --json
+rea extract-artifact ./boot.itb --json
+```
+
+See [U-Boot FIT images](fit-images.md) for recognition, data sources, hashes
+and limits.
+
 Inspect local model declarations without loading weights:
 
 ```bash

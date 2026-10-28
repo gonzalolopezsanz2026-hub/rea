@@ -200,6 +200,61 @@ export const hexRecordRegionMetadataSchema = z.strictObject({
 export type HexRecordRegionMetadata = z.infer<
   typeof hexRecordRegionMetadataSchema
 >;
+
+/**
+ * U-Boot FIT root facts. Configuration references are declared names; a
+ * reference that names no image is reported as a limitation, not removed.
+ */
+export const fitMetadataSchema = z.strictObject({
+  kind: z.literal("fit"),
+  fdt_version: uint32,
+  fdt_totalsize: offset,
+  external_data_base: offset,
+  description: z.string().nullable(),
+  timestamp: uint32.nullable(),
+  address_cells: uint32.nullable(),
+  default_configuration: z.string().nullable(),
+  configurations: z.array(
+    z.strictObject({
+      name: z.string(),
+      description: z.string().nullable(),
+      kernel: z.array(z.string()),
+      firmware: z.array(z.string()),
+      fdt: z.array(z.string()),
+      ramdisk: z.array(z.string()),
+      loadables: z.array(z.string()),
+      signature_algorithms: z.array(z.string()),
+    }),
+  ),
+});
+export type FitMetadata = z.infer<typeof fitMetadataSchema>;
+
+/**
+ * One /images node's declared facts. Primitive fields only, because
+ * sameFormatMetadata compares entry metadata with ===. Load and entry are
+ * declarations, and stored bytes may be compressed or ciphered.
+ */
+export const fitImageMetadataSchema = z.strictObject({
+  kind: z.literal("fit-image"),
+  index: uint32,
+  name: z.string(),
+  description: z.string().nullable(),
+  type: z.string().nullable(),
+  arch: z.string().nullable(),
+  os: z.string().nullable(),
+  compression: z.string().nullable(),
+  load: z.string().nullable(),
+  entry: z.string().nullable(),
+  data_source: z.enum(["embedded", "data-offset", "data-position"]),
+  declared_offset: uint32.nullable(),
+  image_data: z.string().nullable(),
+  cipher_algo: z.string().nullable(),
+  hash_algorithms: z.string(),
+  hashes_verified: uint32,
+  hashes_unverified: uint32,
+  signature_algorithms: z.string(),
+});
+export type FitImageMetadata = z.infer<typeof fitImageMetadataSchema>;
 /** Runtime member identity, independent of blob layout and directory order. */
 export const nodeSeaEntryDeclaration = (
   metadata: z.infer<typeof nodeSeaEntryMetadataSchema>,
@@ -265,6 +320,8 @@ export const artifactFormatMetadataSchema = z.discriminatedUnion("kind", [
   hexRecordRegionMetadataSchema,
   uImageMetadataSchema,
   uImageEntryMetadataSchema,
+  fitMetadataSchema,
+  fitImageMetadataSchema,
 ]);
 export type ArtifactFormatMetadata = z.infer<
   typeof artifactFormatMetadataSchema

@@ -330,9 +330,45 @@ const probesFor = (
           },
         ]
       : [];
+  if (format === "fit") return fitProbes(inventory);
   return format === "directory"
     ? directoryProbes(inventory)
     : probesForFormat(format);
+};
+
+const fitProbes = (
+  inventory: ArtifactInventoryResult,
+): ArtifactInspectionResult["next_probes"] => {
+  // Extraction keeps stored bytes, so only plain images are directly analyzable.
+  const images = inventory.occurrences.flatMap((row) =>
+    row.format_metadata?.kind === "fit-image" &&
+    row.format_metadata.compression === "none" &&
+    row.format_metadata.cipher_algo === null
+      ? [row.format_metadata]
+      : [],
+  );
+  return [
+    ...(images.some((image) => image.type === "flat_dt")
+      ? [
+          {
+            operation: "inspect_devicetree",
+            rationale:
+              "Extract images with extract_artifact, then inspect uncompressed, unciphered flat_dt images with inspect_devicetree.",
+            authority: "artifact-bytes" as const,
+          },
+        ]
+      : []),
+    ...(images.some((image) => image.load !== null)
+      ? [
+          {
+            operation: "open_binary",
+            rationale:
+              "Extract images with extract_artifact, then open an uncompressed, unciphered image with open_binary format raw-binary, an architecture matching its declared arch, and entry_point set to its declared load address (raw-binary maps file offset 0 at entry_point).",
+            authority: "native-analysis-provider" as const,
+          },
+        ]
+      : []),
+  ];
 };
 
 // An application bundle directory is only a container, so its probes follow
