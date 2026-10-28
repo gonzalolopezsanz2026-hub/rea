@@ -68,6 +68,15 @@ Setup registers REA with your agent and installs matching workflow instructions.
 
 ## Quick start
 
+### Reall: project workspace in this fork
+
+This fork also includes **[Reall](studio/README.md)**, a local web application
+with Spanish/English UI, saved provider connections, model pricing, project
+folders and live token usage. Built by [Artesia by Conra](https://artesia.ar).
+It uses REA as its analysis engine and is independent of the official REA product.
+See the [Reall setup and Docker guide](studio/README.md#inicio-local).
+
+
 On Linux, Ghidra, JADX, firmware tool launches and static JavaScript/Electron
 analysis require a procps-compatible `ps` on REA's `PATH` for process ownership
 checks. Recovery steps are in `docs/installation.md` under
