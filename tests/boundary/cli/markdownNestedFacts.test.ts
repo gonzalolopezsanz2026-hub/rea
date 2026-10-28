@@ -1,12 +1,14 @@
 import { join } from "node:path";
 import { expect, it } from "vitest";
+import { createMarkdownRenderer } from "vitepress";
+import { parseFragment, type DefaultTreeAdapterTypes } from "parse5";
 
 import { renderCliDocument } from "../../../src/cliOutput.js";
 import { writeOrderedZip } from "../../fixtures/artifactEntryOrder.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
 import { workspaceCliTest } from "../../support/cli/workspaceCliFixture.js";
 
-it("retains nested facts in standalone Markdown table cells and mixed arrays", () => {
+it("retains nested facts in standalone Markdown table cells and mixed arrays", async () => {
   const value = [
     {
       details: { path: "alpha.txt" },
@@ -15,13 +17,28 @@ it("retains nested facts in standalone Markdown table cells and mixed arrays", (
     },
   ];
   const markdown = renderCliDocument(value, "md", false);
-  expect(markdown).toContain('{"path":"alpha.txt"}');
-  expect(markdown).toContain('\\[{"path":"sub/beta.txt"}\\]');
-  expect(markdown).toContain("caller\\|value");
-  expect(markdown).not.toContain("[object Object]");
-  expect(
-    renderCliDocument({ mixed: [1, { path: "retained" }] }, "md", false),
-  ).toContain('{"path":"retained"}');
+  const renderer = await createMarkdownRenderer(process.cwd(), {
+    linkify: false,
+  });
+  const text = (node: DefaultTreeAdapterTypes.Node): string =>
+    node.nodeName === "#text" && "value" in node
+      ? node.value
+      : "childNodes" in node
+        ? node.childNodes.map(text).join("")
+        : "";
+  const rendered = text(parseFragment(renderer.render(markdown)));
+  expect(rendered).toContain('{"path":"alpha.txt"}');
+  expect(rendered).toContain('[{"path":"sub/beta.txt"}]');
+  expect(rendered).toContain("caller|value");
+  expect(rendered).not.toContain("[object Object]");
+  const mixed = renderCliDocument(
+    { mixed: [1, { path: "retained" }] },
+    "md",
+    false,
+  );
+  expect(text(parseFragment(renderer.render(mixed)))).toContain(
+    '{"path":"retained"}',
+  );
   expect(JSON.parse(renderCliDocument(value, "json", false))).toEqual(value);
 });
 

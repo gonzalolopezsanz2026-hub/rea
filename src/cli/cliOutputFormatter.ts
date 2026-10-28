@@ -250,11 +250,28 @@ const escapeInlineSyntax = (
 
 const escapeTableCell = (value: string): string =>
   value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/[\\|`*[\]~]|_+/g, escapeInlineSyntax)
+    // Encode renderer-extension introducers at the same boundary as HTML
+    // characters. Generated entities must not themselves be re-escaped.
+    .replace(/[&<>:]|;(?=-?[)(])/g, (character) => {
+      switch (character) {
+        case "&":
+          return "&amp;";
+        case "<":
+          return "&lt;";
+        case ">":
+          return "&gt;";
+        case ":":
+          return "&#58;";
+        default:
+          return "&#59;";
+      }
+    })
+    .replace(/([xXB8]-)\)/g, "$1&#41;")
+    .replace(/[\\|`*[\]~{}]|_+/g, escapeInlineSyntax)
     .replace(/\r\n|\r|\n/g, "<br>");
+
+const encodeMarkdownWhitespace = (whitespace: string): string =>
+  whitespace.replace(/ /g, "&#32;").replace(/\t/g, "&#9;");
 
 /** Heading and paragraph facts are literal data, including block syntax. */
 const escapeMarkdownText = (value: string): string =>
@@ -262,9 +279,8 @@ const escapeMarkdownText = (value: string): string =>
     .replace(/#/g, "\\#")
     .replace(/^(\s*)([-+=])/, "$1\\$2")
     .replace(/^(\s*\d{1,9})([.)])(?=\s)/, "$1\\$2")
-    .replace(/^[ \t]+/, (indent) =>
-      indent.replace(/ /g, "&#32;").replace(/\t/g, "&#9;"),
-    );
+    .replace(/^[ \t]+/, encodeMarkdownWhitespace)
+    .replace(/[ \t]+$/u, encodeMarkdownWhitespace);
 
 const markdownHeading = (path: readonly string[]): string =>
   `## ${escapeMarkdownText(path.join("."))}\n\n`;
@@ -275,8 +291,8 @@ const renderTable = (
 ): string => {
   if (headers.length === 0) return "";
   const encodeTableCell = (value: string): string =>
-    escapeTableCell(value).replace(/^ +| +$/g, (spaces) =>
-      "&#32;".repeat(spaces.length),
+    escapeTableCell(value).replace(/^[ \t]+|[ \t]+$/g, (spaces) =>
+      encodeMarkdownWhitespace(spaces),
     );
   const escapedHeaders = headers.map(encodeTableCell);
   const widths = escapedHeaders.map((header) => header.length);
