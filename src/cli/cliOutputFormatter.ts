@@ -261,7 +261,7 @@ const escapeMarkdownText = (value: string): string =>
   escapeTableCell(value)
     .replace(/#/g, "\\#")
     .replace(/^(\s*)([-+=])/, "$1\\$2")
-    .replace(/^(\s*\d{1,9})([.)])(?=\s)/, "$1\\$2")
+    .replace(/^(\s*\d{1,9})([.)])(?=\s|$)/, "$1\\$2")
     .replace(/^[ \t]+/, (indent) =>
       indent.replace(/ /g, "&#32;").replace(/\t/g, "&#9;"),
     );
