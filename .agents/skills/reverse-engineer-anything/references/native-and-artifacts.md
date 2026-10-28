@@ -187,6 +187,20 @@ container. gzip, xz, and zstd whole-file containers are unsupported and name
 decompress into a separate file, then call `inspect_kernel_module` on that file. See
 [Linux kernel modules](https://github.com/morluto/rea/blob/main/docs/kernel-modules.md).
 
+## Linux BTF
+
+Use `inspect_btf` for an explicit local standalone BTF blob or an ELF image
+carrying `.BTF` when the question concerns type layouts, struct members and
+bitfields, function prototypes, enumerators, variables, data sections, or
+`.BTF.ext` func/line/CO-RE records. No `open_binary`, BPF toolchain, or kernel
+access is required. The CLI equivalent is `inspect-btf PATH`. Preserve artifact
+SHA-256, the selected section range, byte order, and 1-based type ids. Types are
+paged by id or selected by id/exact name; duplicate names return every match.
+An unknown kind stops the scan and reports the undecoded range. `.BTF.base`
+presence does not authorize relocation, and unresolved references stay
+unresolved. See
+[Linux BTF](https://github.com/morluto/rea/blob/main/docs/btf.md).
+
 ## CPython pyc files
 
 Use `inspect_python_pyc` for an explicit local CPython 3.7–3.13 `.pyc` when the

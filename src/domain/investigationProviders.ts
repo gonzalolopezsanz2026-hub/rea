@@ -66,6 +66,13 @@ export const KERNEL_MODULE_PROVIDER = Object.freeze({
   version: "1",
 } as const);
 
+/** Provider identity for portable, execution-free Linux BPF Type Format decoding. */
+export const BTF_PROVIDER = Object.freeze({
+  id: "rea-btf",
+  name: "REA BTF parser",
+  version: "1",
+} as const);
+
 /** Provider identity for execution-free Shannon byte-entropy profiling. */
 export const BYTE_ENTROPY_PROVIDER = Object.freeze({
   id: "byte-entropy",

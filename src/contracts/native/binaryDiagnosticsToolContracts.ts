@@ -56,6 +56,7 @@ import {
   inspectKernelModuleInputSchema,
   kernelModuleSchema,
 } from "../../domain/native/kernelModule.js";
+import { inspectBtfInputSchema, btfSchema } from "../../domain/native/btf.js";
 
 /** Caller-selected delivery of completed binary layout Evidence. */
 export const inspectBinaryLayoutRequestSchema =
@@ -280,6 +281,31 @@ export const BINARY_DIAGNOSTICS_TOOL_CONTRACTS = [
         input: {
           path: "/artifacts/crash.core",
           include_debugger_context: true,
+        },
+      },
+    ],
+  },
+  {
+    name: "inspect_btf",
+    ...toolContractMetadata("inspect_btf"),
+    kind: "native-provider",
+    description:
+      "Inspect one explicit local Linux BTF artifact without loading a BPF program, attaching a probe, invoking a verifier or reading live kernel state. Admits a standalone BTF blob (for example a saved copy of /sys/kernel/btf/vmlinux) or an ELF image carrying a .BTF section, and reads the sibling .BTF.ext when present. Returns byte order, version, header lengths, type/string section ranges with artifact SHA-256, string-table counts, and a page of decoded types. Every released kind 1-19 is decoded with its members, bitfields, parameters, enumerators, data-section variables, tags and one-level reference summary, plus .BTF.ext func/line/CO-RE records grouped by ELF section. Types are paged by 1-based id or selected by id/exact name; ext records are paged per section. Unknown kinds, out-of-range offsets and unterminated strings stay explicit, and split-BTF .BTF.base references are reported unresolved rather than relocated. Reads a stable regular file; malformed headers and exhausted budgets return no partial success. Portable on supported Node hosts; no debug package, BPF toolchain or catalog is required.",
+    inputSchema: inspectBtfInputSchema,
+    outputSchema: evidenceResultOf(btfSchema),
+    examples: [
+      {
+        title: "Inspect a kernel BTF blob's struct types",
+        input: {
+          path: "/artifacts/vmlinux.btf",
+          type_name: "task_struct",
+        },
+      },
+      {
+        title: "Page function and line records for one ELF section",
+        input: {
+          path: "/artifacts/program.ko",
+          ext_section: ".text",
         },
       },
     ],

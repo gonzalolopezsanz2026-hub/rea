@@ -18,6 +18,8 @@ import { AppleIpsService } from "../application/binaryDiagnostics/AppleIpsServic
 import { AppleIpsProvider } from "../native/apple/AppleIpsProvider.js";
 import { KernelModuleService } from "../application/binaryDiagnostics/KernelModuleService.js";
 import { KernelModuleProvider } from "../native/elf/KernelModuleProvider.js";
+import { BtfService } from "../application/binaryDiagnostics/BtfService.js";
+import { BtfProvider } from "../native/btf/BtfProvider.js";
 import type { ArtifactResourceScope } from "../artifacts/ArtifactResourceScope.js";
 import { NativeExportsService } from "../application/binaryDiagnostics/NativeExportsService.js";
 import { NativeExportsProvider } from "../native/exports/NativeExportsProvider.js";
@@ -54,6 +56,10 @@ export const createAppleIpsService = (): AppleIpsService =>
 /** Portable Linux kernel-module metadata inspection with no engine or host `modinfo`. */
 export const createKernelModuleService = (): KernelModuleService =>
   new KernelModuleService(new KernelModuleProvider());
+
+/** Portable Linux BTF inspection with no engine, BPF toolchain or live kernel access. */
+export const createBtfService = (): BtfService =>
+  new BtfService(new BtfProvider());
 
 /** Compose the offline adapter without import-time I/O or dependency acquisition. */
 export const createBinaryLayoutService = (

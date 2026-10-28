@@ -393,6 +393,19 @@ applicable. gzip, xz, and zstd containers are unsupported and name
 utility, then inspect the decompressed file. See
 [Linux kernel modules](kernel-modules.md).
 
+Inspect Linux BPF Type Format types and `.BTF.ext` records without loading a
+program:
+
+```bash
+rea inspect-btf /absolute/path/to/vmlinux.btf --json
+```
+
+The workflow admits a standalone BTF blob or an ELF image carrying `.BTF`. It
+decodes every released type kind and reports a requested page with members,
+bitfields, parameters, enumerators, variables and tags, plus one-level type
+references and func/line/CO-RE records grouped by ELF section. Unknown kinds, out-of-range references and
+split-BTF base references stay explicit. See [Linux BTF](btf.md).
+
 Inspect a CPython 3.7–3.13 `.pyc` header and nested marshal code objects
 without executing bytecode or installing Python:
 

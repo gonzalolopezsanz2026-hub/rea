@@ -11,6 +11,7 @@ import {
   createAppleIpsService,
   createDevicetreeService,
   createKernelModuleService,
+  createBtfService,
   createPeLoadConfigService,
   createPeResourcesService,
   createPeCertificatesService,
@@ -31,6 +32,7 @@ import { inspectNativeExportsInputSchema } from "../domain/native/nativeExports.
 import { inspectElfNotesInputSchema } from "../domain/native/elfNotes.js";
 import { inspectAppleIpsInputSchema } from "../domain/native/appleIps.js";
 import { inspectKernelModuleInputSchema } from "../domain/native/kernelModule.js";
+import { inspectBtfInputFields } from "../domain/native/btf.js";
 import { projectAnalysisError } from "../domain/analysisErrorProjection.js";
 import { finishAnalysisCommand } from "./finishAnalysisCommand.js";
 import { localPathStringSchema } from "../domain/localPath.js";
@@ -422,6 +424,62 @@ export const registerBinaryDiagnosticsCommands = (
               detail: options.detail,
               evidenceOutput: options.evidence_output,
             }),
+        );
+      }),
+  });
+  cli.command(CLI_COMMANDS.inspectBtf, {
+    description:
+      "Inspect Linux BTF types and .BTF.ext records without loading a program",
+    args: z.object({
+      path: localPathStringSchema.describe(
+        "Local standalone BTF blob or ELF image carrying .BTF",
+      ),
+    }),
+    options: z.object({
+      section: inspectBtfInputFields.section,
+      typeId: inspectBtfInputFields.type_id,
+      typeName: inspectBtfInputFields.type_name,
+      typeOffset: inspectBtfInputFields.type_offset,
+      typeLimit: inspectBtfInputFields.type_limit,
+      includeExt: inspectBtfInputFields.include_ext,
+      extSection: inspectBtfInputFields.ext_section,
+      extOffset: inspectBtfInputFields.ext_offset,
+      extLimit: inspectBtfInputFields.ext_limit,
+      maxFileBytes: inspectBtfInputFields.max_file_bytes,
+    }),
+    run: ({ args, options }) =>
+      withCommandCancellation(async (signal) => {
+        const btf = createBtfService();
+        return await logCliCommand(logger, CLI_COMMANDS.inspectBtf, async () =>
+          finishAnalysisCommand(
+            () =>
+              btf.inspect(
+                {
+                  path: absoluteCallerPath(args.path),
+                  section: options.section,
+                  ...(options.typeId === undefined
+                    ? {}
+                    : { type_id: options.typeId }),
+                  ...(options.typeName === undefined
+                    ? {}
+                    : { type_name: options.typeName }),
+                  type_offset: options.typeOffset,
+                  type_limit: options.typeLimit,
+                  include_ext: options.includeExt,
+                  ...(options.extSection === undefined
+                    ? {}
+                    : { ext_section: options.extSection }),
+                  ext_offset: options.extOffset,
+                  ext_limit: options.extLimit,
+                  max_file_bytes: options.maxFileBytes,
+                },
+                { signal },
+              ),
+            btf,
+            "rea-btf",
+            "inspect_btf",
+            signal,
+          ).then(projectCliAnalysisResult),
         );
       }),
   });
