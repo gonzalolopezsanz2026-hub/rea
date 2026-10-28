@@ -164,6 +164,10 @@ import { registerAndroidTools } from "./registerAndroidTools.js";
 import { registerApktoolTools } from "./registerApktoolTools.js";
 import { registerPcapTools } from "./registerPcapTools.js";
 import { registerFlutterTools } from "./registerFlutterTools.js";
+import { registerJvmTools } from "./registerJvmTools.js";
+import type { JvmAnalysisPort } from "../application/jvm/JvmAnalysisPort.js";
+import { JvmAnalysisService } from "../application/jvm/JvmAnalysisService.js";
+import { createJvmAnalysisProvider } from "../composition/jvm.js";
 import { registerJebTools } from "./registerJebTools.js";
 import { registerAdbTools } from "./registerAdbTools.js";
 import { AndroidAnalysisService } from "../application/android/AndroidAnalysisService.js";
@@ -243,6 +247,7 @@ export interface CreateServerOptions {
   readonly apktoolAnalysis?: ApktoolResourceAnalysisPort;
   readonly pcapAnalysis?: PcapAnalysisPort;
   readonly flutterAnalysis?: FlutterBuildAnalysisPort;
+  readonly jvmAnalysis?: JvmAnalysisPort;
   readonly jebAnalysis?: JebAnalysisPort;
   readonly adbDeviceAnalysis?: AdbDeviceAnalysisPort;
   readonly browserObservation?: BrowserObservationPort;
@@ -571,6 +576,7 @@ export const createServer = (
     options.apktoolAnalysis ??
     createApktoolResourceAnalysisProvider(environment);
   const jeb = options.jebAnalysis ?? createJebAnalysisProvider(environment);
+  const jvm = options.jvmAnalysis ?? createJvmAnalysisProvider(environment);
   const adbDevice =
     options.adbDeviceAnalysis ?? createAdbDeviceAnalysisProvider(environment);
   const cutter = new CutterBridgeService(
@@ -587,6 +593,7 @@ export const createServer = (
       packetCapture.close(),
       signalRecording.close(),
       apktool.close(),
+      jvm.close(),
       jeb.close(),
       adbDevice.close(),
       flutter.close(),
@@ -853,6 +860,13 @@ export const createServer = (
     recordEvidence,
     analysisAdmission,
   );
+  registerJvmTools(
+    server,
+    new JvmAnalysisService(jvm),
+    toolLogger,
+    recordEvidence,
+    analysisAdmission,
+  );
   registerObservationTools(toolContext);
   registerGuidedPrompts(server, analysis, session);
   if (session !== undefined) {
@@ -872,6 +886,7 @@ export const createServer = (
       apktoolAnalysisAvailability: (signal) =>
         apktool.inspectAvailability(signal),
       jebAnalysisAvailability: (signal) => jeb.inspectAvailability(signal),
+      jvmAnalysisAvailability: (signal) => jvm.inspectAvailability(signal),
       startedAt,
     });
   }

@@ -170,6 +170,7 @@ REA에는 Node.js 22.x(>=22.23.4), 24.x(>=24.22.1) 또는 26+ (>=26.12.1)와 npm
 | 웹사이트               | 페이지 구조, 스크립트, 네트워크 관찰 결과, 요청한 스크린샷                    | Chrome 계열 브라우저; [브라우저 분석](../browser-observation.md)                                                                  |
 | 저장된 네트워크 캡처   | 요청, 응답, 접근 가능한 페이로드, 소스 위치                                   | HAR 또는 Fiddler Everywhere SAZ; mitmproxy 네이티브 캡처에는 Linux의 mitmdump; [캡처 가이드](../web-network-captures.md)          |
 | .NET 어셈블리          | 메타데이터, CIL 명령, 선언된 네이티브 의존성, 빌드 비교                       | 별도 도구 불필요(정적 검사만); [관리 코드 가이드](../managed-code-analysis.md)                                                    |
+| JVM bytecode           | Derived Java sources, digests, durable manifest and diagnostics               | Caller-supplied Vineflower and Java; [JVM guide](../jvm-analysis.md)                                                              |
 | Android APK            | 매니페스트 선언, 클래스, 디컴파일된 메서드, 참조                              | Linux/macOS/Windows x64의 헤드리스 JADX와 전체 JDK; [Android 가이드](../android-analysis.md)                                      |
 | Android 기기           | 기기, 패키지, 프로세스, 로그, 덤프, 화면 캡처, APK/파일 전송                  | 호출자 제공 adb(에뮬레이터 또는 실제 기기); [ADB 가이드](../adb-device-analysis.md)                                               |
 | JEB 프로젝트           | 엔진 기반 프로젝트 유닛, 아티팩트 해시, 타입/메서드 의사코드                  | 호출자가 시작하고 MCP를 제공하는 JEB 클라이언트(REA_JEB_MCP_URL로 선택); [JEB 가이드](../jeb-analysis.md)                         |

@@ -289,6 +289,10 @@ export const providerCatalog = (sources) => {
       contracts: sources.apktoolContracts.APKTOOL_TOOL_CONTRACTS,
     },
     {
+      identity: sources.jvmProvider.VINEFLOWER_PROVIDER_IDENTITY,
+      contracts: sources.jvmContracts.JVM_TOOL_CONTRACTS,
+    },
+    {
       identity: sources.jebProvider.JEB_PROVIDER_IDENTITY,
       contracts: sources.jebContracts.JEB_TOOL_CONTRACTS,
     },

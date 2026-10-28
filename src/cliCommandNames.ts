@@ -92,6 +92,8 @@ export const CLI_COMMANDS = Object.freeze({
   identifyFlutterBuild: "identify-flutter-build",
   inspectDartAot: "inspect-dart-aot",
   inspectApktoolClient: "inspect-apktool-client",
+  inspectJvmDecompiler: "inspect-jvm-decompiler",
+  decompileJvmArtifact: "decompile-jvm-artifact",
   decodeAndroidResources: "decode-android-resources",
   inspectAdbClient: "inspect-adb-client",
   listAdbDevices: "list-adb-devices",

@@ -226,6 +226,27 @@ schema facts, not row-read targets. REA inspects private copies and leaves
 the source files untouched; obtain a coherent quiescent database/WAL snapshot
 before inspection. See [SQLite snapshots](https://github.com/morluto/rea/blob/main/docs/sqlite-databases.md).
 
+## JVM bytecode
+
+- Use `decompile_jvm_artifact` for an explicit regular `.class`, `.jar`, or `.zip`
+  file. Supply an absolute `path` and a new absolute `output_directory` whose
+  parent exists. Existing destinations are refused.
+- Use `inspect_jvm_decompiler` for launcher diagnostics. The provider uses
+  `REA_VINEFLOWER_COMMAND` (one absolute executable) or `vineflower` on `PATH`;
+  Java and Vineflower remain caller-installed.
+- Preserve explicit `classpath` dependencies and `class_prefix` selections. A
+  prefix uses JVM slash names, such as `org/example/Feature`. Dependencies are
+  for type resolution, not additional source targets.
+- Read the emitted Java files named by the result. Keep source/input SHA-256
+  values, the durable manifest, provider version and diagnostics with findings.
+  Complete source inventory only means all emitted Java files were inventoried.
+- Derived Java is not original Scala source. Compilation remains `not_attempted`
+  and runtime equivalence remains `unknown`; never upgrade these to acceptance
+  based on a decompiler exit code.
+- The tool does not execute target bytecode or install tools. Output files survive
+  session closure; MCP Evidence is retained and exportable through the bundle
+  tools. See the [JVM guide](https://github.com/morluto/rea/blob/main/docs/jvm-analysis.md).
+
 ## Recorded Linux crashes
 
 Use `inspect_recorded_crash` with an explicit Linux x86-64 ELF core path to

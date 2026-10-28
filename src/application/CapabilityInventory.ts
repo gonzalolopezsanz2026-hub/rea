@@ -95,6 +95,7 @@ export type AvailabilityPolicy = {
   readonly adbAnalysisAvailability?: ProviderAvailability;
   readonly apktoolAnalysisAvailability?: ProviderAvailability;
   readonly jebAnalysisAvailability?: JebAnalysisAvailability;
+  readonly jvmAnalysisAvailability?: ProviderAvailability;
   readonly javascriptRecoveryEnabled?: boolean;
   readonly webModuleResolutionEnabled?: boolean;
   readonly browserObservationEnabled?: boolean;
@@ -466,6 +467,16 @@ const workflowAvailabilityFor = ({
           remediation: capability.reason,
         };
   }
+  if (kind === "jvm-provider")
+    return name === "inspect_jvm_decompiler" ||
+      policy.jvmAnalysisAvailability?.status === "available"
+      ? { reason: "available", remediation: null }
+      : {
+          reason: "provider_unavailable",
+          remediation:
+            policy.jvmAnalysisAvailability?.reason ??
+            "Provide a local Vineflower executable on PATH or set absolute REA_VINEFLOWER_COMMAND; call inspect_jvm_decompiler for version diagnostics. No active target is required.",
+        };
   if (name === "trace_web_module_imports")
     return {
       reason: "available",

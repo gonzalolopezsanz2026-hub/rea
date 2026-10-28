@@ -80,6 +80,10 @@ const EXECUTION_WORDING_EXCEPTIONS: Readonly<Record<string, string>> = {
     "inspects the operator-selected apktool launcher; never installs it",
   inspect_pcap_client:
     "probes the operator-selected tshark and capinfos; never installs them",
+  inspect_jvm_decompiler:
+    "probes the operator-configured Vineflower launcher; never installs it",
+  decompile_jvm_artifact:
+    "runs the operator-configured decompiler without executing target bytecode",
   inspect_jeb_client: "talks to a caller-started JEB; never launches it",
   open_jeb_project: "the engine analyzes the file; REA does not execute it",
   inspect_adb_client:

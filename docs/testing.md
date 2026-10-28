@@ -1224,6 +1224,32 @@ Synthetic producer regressions run independently:
 npm run test:focused -- tests/boundary/process/jadxIntegration.test.ts tests/boundary/process/androidAnalysisMcp.test.ts tests/boundary/process/androidMappingMcp.test.ts
 ```
 
+## JVM decompilation
+
+- `npm run verify:jvm` requires a caller-installed Vineflower launcher selected by
+  `REA_VINEFLOWER_COMMAND` or `PATH`, plus a full JDK selected by `JAVA_HOME` or
+  `javac` and `jar` on `PATH`. The lane never installs tools or executes fixture
+  bytecode or derived source.
+- The authored Java fixture exercises a standalone class, a JAR with branches,
+  a nested class and a lambda, two explicit dependency JARs, and a class-prefix
+  filter through both the compiled CLI and actual stdio MCP.
+- Assertions cover advertised input/output schemas, session availability, source
+  parity, input and output SHA-256 values, durable manifest identity, unchanged input bytes,
+  refusal of an existing output, retained/exported Evidence, and awaited cleanup.
+- Separately compiled case-distinct classes check that a case-sensitive output
+  keeps both sources, while an incompatible filesystem refuses publication
+  without retaining partial output.
+- `tests/acceptance/jvmCli.test.ts` checks unavailable-provider and output-conflict
+  behavior through the compiled CLI and stdio MCP without requiring Vineflower.
+- Verified on macOS arm64 with Vineflower 1.12.0 and `javac 26.0.2.1` targeting
+  Java 17: one standalone source, three full-JAR sources, and two prefix-selected
+  sources through each interface. The case-insensitive filesystem collision was
+  refused without partial output; successful sources remained after MCP closure.
+- [UNVERIFIED] Linux/Windows hosts, publication to case-sensitive filesystems,
+  Scala/Kotlin recovery, obfuscated bytecode, source recompilation and runtime
+  equivalence remain outside this run. See the [JVM guide](jvm-analysis.md)
+  for setup, commands and output semantics.
+
 ## Apktool resource decoding
 
 `npm run verify:apktool -- --apk PATH` exercises both Apktool operations

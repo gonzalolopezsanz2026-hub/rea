@@ -13,6 +13,31 @@ import {
   type ToolAvailability,
 } from "../contracts/toolOutputSchemaPrimitives.js";
 
+it("keeps JVM diagnostics discoverable and reports launcher availability without a target", () => {
+  const status = { open: false, capabilities: [] };
+  const missing = buildCapabilityInventory(status, {
+    processCaptureEnabled: false,
+  });
+  expect(
+    missing.find(({ name }) => name === "inspect_jvm_decompiler"),
+  ).toMatchObject({ available: true });
+  expect(
+    missing.find(({ name }) => name === "decompile_jvm_artifact"),
+  ).toMatchObject({ available: false, reason: "provider_unavailable" });
+  const installed = buildCapabilityInventory(status, {
+    processCaptureEnabled: false,
+    jvmAnalysisAvailability: {
+      status: "available",
+      code: null,
+      reason: null,
+      diagnostics: {},
+    },
+  });
+  expect(
+    installed.find(({ name }) => name === "decompile_jvm_artifact"),
+  ).toMatchObject({ available: true });
+});
+
 it("reports module syntax and native resolution availability separately", () => {
   const input = { open: false, capabilities: [] };
   const unavailable = buildCapabilityInventory(input, {

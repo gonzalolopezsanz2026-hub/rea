@@ -28,6 +28,7 @@ import { ANDROID_TOOL_CONTRACTS } from "./android/androidToolContracts.js";
 import { APKTOOL_TOOL_CONTRACTS } from "./apktool/apktoolToolContracts.js";
 import { PCAP_TOOL_CONTRACTS } from "./pcap/pcapToolContracts.js";
 import { FLUTTER_TOOL_CONTRACTS } from "./flutter/flutterToolContracts.js";
+import { JVM_TOOL_CONTRACTS } from "./jvm/jvmToolContracts.js";
 import { JEB_TOOL_CONTRACTS } from "./jeb/jebToolContracts.js";
 import { ADB_TOOL_CONTRACTS } from "./adb/adbToolContracts.js";
 import { MANAGED_WORKFLOW_TOOL_CONTRACTS } from "./managed/managedWorkflowToolContracts.js";
@@ -129,6 +130,7 @@ export const TOOL_FAMILY_DEFINITIONS = [
     surface: "apktool-provider",
     contracts: APKTOOL_TOOL_CONTRACTS,
   },
+  { id: "jvm", surface: "jvm-provider", contracts: JVM_TOOL_CONTRACTS },
   { id: "jeb", surface: "jeb-provider", contracts: JEB_TOOL_CONTRACTS },
   { id: "adb", surface: "adb-provider", contracts: ADB_TOOL_CONTRACTS },
   {

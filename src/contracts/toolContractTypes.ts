@@ -19,6 +19,7 @@ export const TOOL_KINDS = [
   "android-provider",
   "apktool-provider",
   "flutter-provider",
+  "jvm-provider",
   "jeb-provider",
   "adb-provider",
   "firmware-provider",

@@ -32,6 +32,9 @@ export interface SessionAvailabilityProbes {
   readonly androidAnalysisAvailability: (
     signal: AbortSignal,
   ) => Promise<ProviderAvailability>;
+  readonly jvmAnalysisAvailability?: (
+    signal: AbortSignal,
+  ) => Promise<ProviderAvailability>;
   readonly adbAnalysisAvailability?: (
     signal: AbortSignal,
   ) => Promise<ProviderAvailability>;
@@ -66,6 +69,7 @@ const probeSessionAvailability = (
   advertisesFamily: (family: ToolFamilyId) => boolean,
 ): Promise<{
   readonly android: ProviderAvailability | undefined;
+  readonly jvm: ProviderAvailability | undefined;
   readonly adb: ProviderAvailability | undefined;
   readonly apktool: ProviderAvailability | undefined;
   readonly jeb: JebAnalysisAvailability | undefined;
@@ -74,6 +78,9 @@ const probeSessionAvailability = (
   Promise.all([
     advertisesFamily("android")
       ? probes.androidAnalysisAvailability(signal)
+      : undefined,
+    advertisesFamily("jvm")
+      ? (probes.jvmAnalysisAvailability?.(signal) ?? undefined)
       : undefined,
     advertisesFamily("adb")
       ? (probes.adbAnalysisAvailability?.(signal) ?? undefined)
@@ -87,8 +94,9 @@ const probeSessionAvailability = (
     advertisesFamily("artifact")
       ? (probes.evmLimiterAvailability?.(signal) ?? undefined)
       : undefined,
-  ] as const).then(([android, adb, apktool, jeb, evmLimiter]) => ({
+  ] as const).then(([android, jvm, adb, apktool, jeb, evmLimiter]) => ({
     android,
+    jvm,
     adb,
     apktool,
     jeb,
@@ -135,6 +143,9 @@ export const registerSessionStatusTool = (
         ...(availabilityResults.android === undefined
           ? {}
           : { androidAnalysisAvailability: availabilityResults.android }),
+        ...(availabilityResults.jvm === undefined
+          ? {}
+          : { jvmAnalysisAvailability: availabilityResults.jvm }),
         ...(availabilityResults.adb === undefined
           ? {}
           : { adbAnalysisAvailability: availabilityResults.adb }),

@@ -170,6 +170,7 @@ describe("MCP tool family advertising", () => {
     { scope: ["session"], probed: [] },
     { scope: ["session", "android", "adb"], probed: ["android", "adb"] },
     { scope: ["session", "artifact"], probed: ["evm"] },
+    { scope: ["session", "jvm"], probed: ["jvm"] },
   ])(
     "probes only advertised families for binary_session status ($scope)",
     async ({ scope, probed }) => {
@@ -193,6 +194,7 @@ describe("MCP tool family advertising", () => {
         startedAt: new Date().toISOString(),
         availabilityPolicy: () => ({ processCaptureEnabled: false }),
         androidAnalysisAvailability: probe("android"),
+        jvmAnalysisAvailability: probe("jvm"),
         adbAnalysisAvailability: probe("adb"),
         apktoolAnalysisAvailability: probe("apktool"),
         jebAnalysisAvailability: probe("jeb"),

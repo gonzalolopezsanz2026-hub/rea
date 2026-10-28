@@ -168,6 +168,7 @@ REA 需要 Node.js 22.x（>=22.23.4）、24.x（>=24.22.1）或 26+ (>=26.12.1)�
 | 已保存的網路擷取      | 請求、回應、可訪問的酬載和來源位置                                           | HAR / Fiddler Everywhere SAZ；原生 mitmproxy 擷取需要 Linux 上的 mitmdump；[擷取指南](../web-network-captures.md)  |
 | 封包擷取              | 端點、DNS、TLS SNI、通訊協定分佈和 HTTP 請求                                 | 呼叫端提供的 tshark 和 capinfos；[pcap 指南](../pcap-analysis.md)                                                  |
 | .NET 程式集           | 中繼資料、CIL 指令、聲明的原生依賴和建置對比                                 | 靜態檢查；[托管程式碼指南](../managed-code-analysis.md)                                                            |
+| JVM bytecode          | Derived Java sources, digests, durable manifest and diagnostics              | Caller-supplied Vineflower and Java; [JVM guide](../jvm-analysis.md)                                               |
 | PyInstaller           | CArchive, PYZ, Python bytecode                                               | Static inspection; [Python packaged applications](../python-packaged-applications.md)                              |
 | Android APK           | 清單聲明、類別、反編譯的方法和引用                                           | Linux/macOS/Windows x64 上的無界面 JADX 和完整 JDK；[Android 指南](../android-analysis.md)                         |
 | Android 裝置          | 裝置、套件、程序、日誌、傾印、螢幕擷取以及 APK/檔案傳輸                      | 呼叫端提供的 adb（模擬器或實體裝置）；[ADB 指南](../adb-device-analysis.md)                                        |

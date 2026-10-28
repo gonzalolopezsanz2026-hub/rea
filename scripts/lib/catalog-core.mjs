@@ -95,6 +95,8 @@ const SOURCE_PATHS = {
   pcapContracts: "dist/contracts/pcap/pcapToolContracts.js",
   pcapProvider: "dist/pcap/PcapProvider.js",
   apktoolProvider: "dist/apktool/ApktoolProvider.js",
+  jvmContracts: "dist/contracts/jvm/jvmToolContracts.js",
+  jvmProvider: "dist/jvm/VineflowerProvider.js",
   jebContracts: "dist/contracts/jeb/jebToolContracts.js",
   jebProvider: "dist/jeb/JebProvider.js",
   adbContracts: "dist/contracts/adb/adbToolContracts.js",

@@ -305,6 +305,16 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
     mutatesSession: true,
     launchesProcess: true,
   }),
+  inspect_jvm_decompiler: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+  }),
+  decompile_jvm_artifact: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+    writesFilesystem: true,
+    idempotent: false,
+  }),
   decode_android_resources: effects({
     mutatesSession: true,
     launchesProcess: true,
