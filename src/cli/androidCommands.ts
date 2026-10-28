@@ -4,7 +4,10 @@ import { AndroidAnalysisService } from "../application/android/AndroidAnalysisSe
 import { createAndroidAnalysisProvider } from "../composition/android.js";
 import { CLI_COMMANDS } from "../cliCommandNames.js";
 import { logCliCommand } from "../cliLogging.js";
-import type { AndroidOperation } from "../domain/android/androidAnalysis.js";
+import {
+  androidInputSchemas,
+  type AndroidOperation,
+} from "../domain/android/androidAnalysis.js";
 import type { Logger } from "pino";
 import type { CliInstance } from "./types.js";
 import { withCommandCancellation } from "./commandCancellation.js";
@@ -63,11 +66,12 @@ export const registerAndroidCommands = (
       }),
     );
   const path = z.string().describe("Local standalone APK path");
-  const className = z.string().describe("Exact fully qualified class name");
-  const mappingPath = z
-    .string()
-    .optional()
-    .describe(
+  const className =
+    androidInputSchemas.inspect_android_class.shape.class_name.describe(
+      "Exact fully qualified class name",
+    );
+  const mappingPath =
+    androidInputSchemas.inspect_android_class.shape.mapping_path.describe(
       "Absolute local R8/ProGuard mapping.txt; names are annotated, never replaced",
     );
   const mappingInput = (path: string | undefined) =>
@@ -223,7 +227,10 @@ export const registerAndroidCommands = (
     args: z.object({
       path,
       className,
-      methodName: z.string().describe("Exact declared method name"),
+      methodName:
+        androidInputSchemas.inspect_android_method.shape.method_name.describe(
+          "Exact declared method name",
+        ),
     }),
     options: z.object({
       overloadIndex: cliIntegerArgument(0)
@@ -255,10 +262,10 @@ export const registerAndroidCommands = (
       "Trace incoming APK using nodes for a class or selected method",
     args: z.object({ path, className }),
     options: z.object({
-      methodName: z
-        .string()
-        .optional()
-        .describe("Declared method name; omit for class references"),
+      methodName:
+        androidInputSchemas.trace_android_references.shape.method_name.describe(
+          "Declared method name; omit for class references",
+        ),
       overloadIndex: cliIntegerArgument(0)
         .optional()
         .describe("Index among same-name methods from inspect-android-class"),
