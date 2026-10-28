@@ -15,6 +15,7 @@ import { BinarySession } from "./BinarySession.js";
 import { SessionProviderRouter } from "./SessionProviderRouter.js";
 import { bundleResourceRootSchema } from "../../domain/apple/bundleResourceRoot.js";
 import { AnalysisSnapshotMismatchError } from "../../domain/evidenceErrors.js";
+import { projectAnalysisError } from "../../domain/analysisErrorProjection.js";
 import type { AnalysisSnapshot } from "../../domain/analysisSnapshot.js";
 import { ProviderCleanupError } from "../../domain/providerCleanupError.js";
 import { ProviderAdapterError } from "../../domain/providerAdapterError.js";
@@ -138,12 +139,20 @@ it("opens a resource-only bundle without executable identity and keeps snapshot 
   });
   const snapshot = session.exportAnalysisSnapshot();
   expect(snapshot.ok).toBe(false);
-  if (!snapshot.ok)
+  if (!snapshot.ok) {
     expect(snapshot.error).toBeInstanceOf(AnalysisSnapshotMismatchError);
+    expect(projectAnalysisError(snapshot.error)).toMatchObject({
+      remediation: { action: expect.stringContaining("without snapshot_path") },
+    });
+  }
   const imported = session.importAnalysisSnapshot({} as AnalysisSnapshot);
   expect(imported.ok).toBe(false);
-  if (!imported.ok)
+  if (!imported.ok) {
     expect(imported.error).toBeInstanceOf(AnalysisSnapshotMismatchError);
+    expect(projectAnalysisError(imported.error)).toMatchObject({
+      remediation: { action: expect.stringContaining("Open an executable") },
+    });
+  }
   const closedResult = await session.close();
   expect(closedResult.ok).toBe(true);
   expect(closed).toBe(true);

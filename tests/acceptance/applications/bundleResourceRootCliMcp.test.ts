@@ -1,5 +1,5 @@
 import { build } from "plist";
-import { mkdir, writeFile } from "node:fs/promises";
+import { lstat, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { expect } from "vitest";
 
@@ -15,6 +15,24 @@ const resourceOperations = [
   "inspect_asset_catalog",
   "inspect_keyed_archive",
 ] as const;
+
+const expectUnsupportedArtifactOperations = (content: unknown) => {
+  const parsed = toolContract("binary_session").outputSchema.parse(content);
+  for (const name of [
+    "inspect_artifact",
+    "extract_artifact",
+    "trace_dylib_resolution",
+  ])
+    expect(
+      parsed.result.tool_availability.groups.find((group) =>
+        group.names.includes(name),
+      ),
+    ).toMatchObject({
+      available: false,
+      reason: "target_unsupported",
+      remediation: expect.stringContaining("open_binary"),
+    });
+};
 
 cliTest.skipIf(process.platform !== "darwin")(
   "inspects a keyless app resource root through the compiled CLI",
@@ -52,11 +70,11 @@ cliTest.skipIf(process.platform !== "darwin")(
 cliTest.skipIf(process.platform !== "darwin")(
   "retains and switches keyless resource sessions through stdio MCP",
   async () => {
-    const temporaryRoot = await createTestTempDirectory(
+    const root = await createTestTempDirectory(
       "rea-resource-session-acceptance-",
     );
-    const firstBundle = await createKeylessBundle(temporaryRoot, "First");
-    const secondBundle = await createKeylessBundle(temporaryRoot, "Second");
+    const firstBundle = await createKeylessBundle(root, "First");
+    const secondBundle = await createKeylessBundle(root, "Second");
     const { call } = await connectLocalToolsMcp();
     const opened = await call("open_bundle_resources", { path: firstBundle });
     expect(opened.isError).not.toBe(true);
@@ -91,6 +109,35 @@ cliTest.skipIf(process.platform !== "darwin")(
       },
     });
 
+    for (const detail of ["summary", "complete"] as const) {
+      const status = await call("binary_session", { detail });
+      expectUnsupportedArtifactOperations(status.structuredContent);
+    }
+    for (const [name, input] of [
+      ["inspect_artifact", {}],
+      ["extract_artifact", { integrity_policy: "fail" }],
+      ["trace_dylib_resolution", { roots: ["Absent"] }],
+    ] as const) {
+      const refused = await call(name, input);
+      expect(refused.isError).toBe(true);
+      expect(errorBody(refused)).toMatchObject({
+        error: { code: "capability_unavailable" },
+      });
+    }
+    const afterRefusals = await call("binary_session", { detail: "complete" });
+    expectUnsupportedArtifactOperations(afterRefusals.structuredContent);
+    const refusedSnapshot = await call("close_binary", {
+      snapshot_path: join(root, "snapshot.json"),
+    });
+    expect(refusedSnapshot.isError).toBe(true);
+    expect(errorBody(refusedSnapshot)).toMatchObject({
+      error: {
+        remediation: {
+          action: expect.stringContaining("without snapshot_path"),
+        },
+      },
+    });
+    await expect(lstat(join(root, "snapshot.json"))).rejects.toThrow("ENOENT");
     for (const operation of resourceOperations) {
       const arguments_ =
         operation === "inspect_keyed_archive"
@@ -163,6 +210,14 @@ cliTest.skipIf(process.platform !== "darwin")(
     ).toMatchObject({ result: { open: false, cleanup_pending: false } });
   },
 );
+
+const errorBody = (response: {
+  content: Array<{ type: string; [key: string]: unknown }>;
+}): unknown => {
+  const text = response.content.find((item) => item.type === "text");
+  if (typeof text?.text !== "string") throw new Error("Expected error text");
+  return JSON.parse(text.text) as unknown;
+};
 
 const createKeylessBundle = async (
   root: string,

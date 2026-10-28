@@ -99,6 +99,56 @@ const entry = (
   return found;
 };
 
+it("reports the active resource session's dispatch policy without limiting independent tools", () => {
+  const resourceStatus = {
+    ...status({ open: true }),
+    session_kind: "bundle_resources",
+    capabilities: [
+      {
+        provider: { id: "bundle-resources", name: "Resources", version: "1" },
+        shared_limitations: [],
+        groups: [
+          {
+            operations: [
+              "inspect_plist",
+              "decode_interface_builder",
+              "inspect_asset_catalog",
+              "inspect_keyed_archive",
+            ],
+            effects: [],
+            limitations: [],
+            available: true,
+            reason: null,
+            availability_code: null,
+          },
+        ],
+      },
+    ],
+  };
+  const entries = buildCapabilityInventory(resourceStatus, enabledPolicy);
+  for (const name of [
+    "inspect_artifact",
+    "extract_artifact",
+    "trace_dylib_resolution",
+  ])
+    expect(entries.find((item) => item.name === name)).toMatchObject({
+      available: false,
+      reason: "target_unsupported",
+      remediation: expect.stringContaining("open_binary"),
+    });
+  for (const name of [
+    "inspect_plist",
+    "decode_interface_builder",
+    "inspect_asset_catalog",
+    "inspect_keyed_archive",
+    "inspect_pe_imports",
+    "close_binary",
+  ])
+    expect(entries.find((item) => item.name === name)).toMatchObject({
+      available: true,
+    });
+});
+
 describe("ADB and Apktool host availability", () => {
   it("uses only their selected owner probes", () => {
     const ready = {
